@@ -1,4 +1,3 @@
-import { Flex } from "@chakra-ui/react";
 import React from "react";
 import { IdeaPreview, IdeaPreviewItem } from "../components/IdeaPreview";
 
