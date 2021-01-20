@@ -8,10 +8,12 @@ function App() {
       <NavBar />
       <Flex
         w="100vw"
-        h="93vh"
+        h={100%-7}
         direction="row"
         align="center"
         justify="center"
+        width="100%"
+        height="auto"
         bgColor="#CBD5E0"
       >
         <Main />
