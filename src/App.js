@@ -5,7 +5,15 @@ import Main from "./Pages/Main";
 function App() {
   return (
     <>
-      <NavBar />
+      <Flex bgColor='gray.200' w='100vw' h='100vh' align='center' justify='center'>
+        <Heading fontSize='96px' fontWeight='500' color='gray.700'>coming soon...</Heading>
+      </Flex>
+    </>
+  );
+}
+/**
+ * 
+ *       <NavBar />
       <Flex
         w="100vw"
         h="93vh"
@@ -16,8 +24,5 @@ function App() {
       >
         <Main />
       </Flex>
-    </>
-  );
-}
-
+ */
 export default App;
