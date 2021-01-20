@@ -12,7 +12,7 @@ function Main() {
           borderRadius="12px"
           justify="center"
           align="center"
-          textAlign="center"
+          textAlign="center"asdad
         >
           <Text>xD</Text>
         </Flex>
