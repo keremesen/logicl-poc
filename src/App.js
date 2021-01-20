@@ -1,28 +1,35 @@
-import { Flex, Heading } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import NavBar from "./components/NavBar";
+import ExplorePage from "./Pages/ExplorePage";
 import Main from "./Pages/Main";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 function App() {
   return (
-    <>
-      <Flex bgColor='gray.200' w='100vw' h='100vh' align='center' justify='center'>
-        <Heading fontSize='96px' fontWeight='500' color='gray.700'>coming soon...</Heading>
-      </Flex>
-    </>
-  );
-}
-/**
- * 
- *       <NavBar />
+    <Router>
+      <NavBar />
       <Flex
         w="100vw"
-        h="93vh"
+        h={100 % -7}
         direction="row"
         align="center"
         justify="center"
+        width="100%"
+        height="auto"
         bgColor="#CBD5E0"
       >
-        <Main />
+        <Switch>
+          <Route path="/" exact>
+            <Main />
+          </Route>
+
+          <Route path="/explore">
+            <ExplorePage />
+          </Route>
+        </Switch>
       </Flex>
- */
+    </Router>
+  );
+}
+
 export default App;

@@ -1,5 +1,6 @@
-import { Flex, Avatar, Heading, Stack } from "@chakra-ui/react";
+import { Flex, Avatar, Heading, Stack, Button } from "@chakra-ui/react";
 import { BellIcon, AddIcon } from "@chakra-ui/icons";
+import { Link } from "react-router-dom";
 
 const NavBar = () => {
   return (
@@ -13,8 +14,13 @@ const NavBar = () => {
       px="32px"
     >
       <Flex>
-        <Heading>logicl</Heading>
+        <Heading>
+          <Link to="/">logicl</Link>
+        </Heading>
       </Flex>
+      <Button backgroundColor="teal.100" w="100px">
+        <Link to="/explore">Explore</Link>
+      </Button>
       <Stack direction="row" spacing="16px" align="center">
         <AddIcon boxSize={6} />
         <BellIcon boxSize={8} />
