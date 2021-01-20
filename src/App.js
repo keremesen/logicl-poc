@@ -1,27 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import { Flex, Heading } from "@chakra-ui/react";
+import NavBar from "./components/NavBar";
+import Main from "./Pages/Main";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-         xd
-        </p>
-        <p>
-          test
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <NavBar />
+      <Flex
+        w="100vw"
+        h="93vh"
+        direction="row"
+        align="center"
+        justify="center"
+        bgColor="#CBD5E0"
+      >
+        <Main />
+      </Flex>
+    </>
   );
 }
 
