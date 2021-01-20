@@ -17,7 +17,7 @@ function App() {
           align="center"
           justify="center"
           height="auto"
-          bgColor="#CBD5E0" sadasdads
+          bgColor="#CBD5E0"
         >
           <Switch>
             <Route path="/" exact>
