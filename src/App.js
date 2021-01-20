@@ -1,4 +1,4 @@
-import { Flex, Heading } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import NavBar from "./components/NavBar";
 import ExplorePage from "./Pages/ExplorePage";
 import Main from "./Pages/Main";
@@ -24,11 +24,9 @@ function App() {
           </Route>
 
           <Route path="/explore">
-          <ExplorePage />
+            <ExplorePage />
           </Route>
         </Switch>
-
-       
       </Flex>
     </Router>
   );

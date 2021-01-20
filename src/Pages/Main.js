@@ -1,4 +1,4 @@
-import { Flex,Text } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import IdeaGroup from "../components/IdeaGroup";
 
 function Main() {

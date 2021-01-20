@@ -14,15 +14,17 @@ const NavBar = () => {
       px="32px"
     >
       <Flex>
-        <Heading>logicl</Heading>
+        <Heading>
+          <Link to="/">logicl</Link>
+        </Heading>
       </Flex>
-      <Button backgroundColor="orange.50" w="100px"> <Link to="/explore">Explore</Link></Button>
+      <Button backgroundColor="teal.100" w="100px">
+        <Link to="/explore">Explore</Link>
+      </Button>
       <Stack direction="row" spacing="16px" align="center">
-      
         <AddIcon boxSize={6} />
         <BellIcon boxSize={8} />
         <Avatar boxSize={8} bgColor="#000" />
-        
       </Stack>
     </Flex>
   );
