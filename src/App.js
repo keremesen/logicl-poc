@@ -1,5 +1,6 @@
 import { Flex, Heading } from "@chakra-ui/react";
 import NavBar from "./components/NavBar";
+import ExplorePage from "./Pages/ExplorePage";
 import Main from "./Pages/Main";
 
 function App() {
@@ -16,7 +17,8 @@ function App() {
         height="auto"
         bgColor="#CBD5E0"
       >
-        <Main />
+        {/* <Main /> */}
+        <ExplorePage />
       </Flex>
     </>
   );
