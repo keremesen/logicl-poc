@@ -1,4 +1,4 @@
-import { Flex, Heading, Avatar, Text } from "@chakra-ui/react";
+import { Flex,Text } from "@chakra-ui/react";
 import IdeaGroup from "../components/IdeaGroup";
 
 function Main() {
@@ -19,7 +19,6 @@ function Main() {
         <IdeaGroup />
         <IdeaGroup />
         <IdeaGroup />
-       
       </Flex>
     </>
   );
