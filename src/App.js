@@ -1,27 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import { Flex } from "@chakra-ui/react";
+import NavBar from "./components/NavBar";
+import ExplorePage from "./Pages/ExplorePage";
+import Main from "./Pages/Main";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-         xd
-        </p>
-        <p>
-          test
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <NavBar />
+      <Flex
+        w="100vw"
+        h={100 % -7}
+        direction="row"
+        align="center"
+        justify="center"
+        width="100%"
+        height="auto"
+        bgColor="#CBD5E0"
+      >
+        <Switch>
+          <Route path="/" exact>
+            <Main />
+          </Route>
+
+          <Route path="/explore">
+            <ExplorePage />
+          </Route>
+        </Switch>
+      </Flex>
+    </Router>
   );
 }
 
