@@ -1,27 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import { Flex, flexbox, Heading } from "@chakra-ui/react";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-         xd
-        </p>
-        <p>
-          test
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Flex
+        direction="row"
+        align="center"
+        justify="center"
+        width="100vw"
+        height="100vh"
+        bgColor="#CBD5E0"
+      >
+        <Heading size="xl" color='#2D3748'>Coming Soon</Heading>
+      </Flex>
+    </>
   );
 }
 
