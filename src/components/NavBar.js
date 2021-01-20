@@ -1,8 +1,10 @@
 import { Flex, Avatar, Heading, Stack, Button } from "@chakra-ui/react";
 import { BellIcon, AddIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const NavBar = () => {
+  const auth = useAuth();
   return (
     <Flex
       as="nav"
@@ -24,7 +26,10 @@ const NavBar = () => {
       <Stack direction="row" spacing="16px" align="center">
         <AddIcon boxSize={6} />
         <BellIcon boxSize={8} />
-        <Avatar boxSize={8} bgColor="#000" />
+
+        <Link to="/auth">
+          <Avatar boxSize={8} bgColor="#000" src={auth.user ? auth.user.photoUrl : ''} />
+        </Link>
       </Stack>
     </Flex>
   );
