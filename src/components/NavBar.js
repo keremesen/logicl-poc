@@ -1,4 +1,4 @@
-import { Flex, Avatar, AvatarBadge, Heading, Stack } from "@chakra-ui/react";
+import { Flex, Avatar, Heading, Stack } from "@chakra-ui/react";
 import { BellIcon, AddIcon } from "@chakra-ui/icons";
 
 const NavBar = () => {
@@ -6,7 +6,7 @@ const NavBar = () => {
     <Flex
       as="nav"
       w="100vw"
-      h="64px"
+      h="7vh"
       bgColor="#FEEBC8"
       align="center"
       justify="space-between"
