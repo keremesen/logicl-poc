@@ -3,14 +3,14 @@ import React from "react";
 import { Avatar } from "@chakra-ui/react";
 import { StarIcon } from "@chakra-ui/icons";
 
-export const IdeaPreviewItem = () => {
+const IdeaPreview = () => {
   return (
     <Flex
       w="70%"
       h="170px"
       backgroundColor="gray.200"
       borderRadius="15px"
-      my="10px"
+      my="16px"
       boxShadow="lg"
       cursor="pointer"
       _hover={{ background: "gray.300" }}
@@ -33,16 +33,4 @@ export const IdeaPreviewItem = () => {
   );
 };
 
-export const IdeaPreview = ({children}) => {
-  return (
-    <Flex
-      w="1080px"
-      h="100%"
-      bgColor="#fff"
-      direction="column"
-      align="center"
-      p="6px"
-      minH="100vh"
-    >{children}</Flex>
-  );
-};
+export default IdeaPreview;

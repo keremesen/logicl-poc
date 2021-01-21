@@ -1,22 +1,36 @@
+import { Flex } from "@chakra-ui/react";
 import React from "react";
-import { IdeaPreview, IdeaPreviewItem } from "../components/IdeaPreview";
+import IdeaPreview from "../components/IdeaPreview";
 
 const ExplorePage = () => {
   return (
-    <>
-      <IdeaPreview>
-        <IdeaPreviewItem />
-        <IdeaPreviewItem />
-        <IdeaPreviewItem />
-        <IdeaPreviewItem />
-        <IdeaPreviewItem />
-        <IdeaPreviewItem />
-        <IdeaPreviewItem />
-        <IdeaPreviewItem />
-        <IdeaPreviewItem />
-        <IdeaPreviewItem />
-      </IdeaPreview>
-    </>
+    <Flex direction="column" align="center" minH="100vh">
+      <Flex
+        minH="100vh"
+        background="#fff"
+        w="1080px"
+        h="100%"
+        flexDirection="column"
+        align="center"
+      >
+        <IdeaPreview />
+        <IdeaPreview />
+        <IdeaPreview />
+        <IdeaPreview />
+        <IdeaPreview />
+        <IdeaPreview />
+        <IdeaPreview />
+        <IdeaPreview />
+        <IdeaPreview />
+        <IdeaPreview />
+        <IdeaPreview />
+        <IdeaPreview />
+        <IdeaPreview />
+        <IdeaPreview />
+        <IdeaPreview />
+        <IdeaPreview />
+      </Flex>
+    </Flex>
   );
 };
 
