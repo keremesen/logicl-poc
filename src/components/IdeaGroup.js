@@ -2,8 +2,8 @@ import React from "react";
 import { Flex, Heading, Avatar } from "@chakra-ui/react";
 const IdeaGroup = () => {
   return (
-    <Flex direction='column' my='30px'>
-      <Heading size="lg" mb='5px'>
+    <Flex direction="column" my="30px">
+      <Heading size="lg" mb="5px">
         Neden Olmasın
       </Heading>
       <Flex
@@ -73,6 +73,8 @@ const IdeaGroup = () => {
           align="center"
           borderRadius="15px"
           m="5px"
+          transition="200ms ease-in-out"
+          cursor="pointer"
           _hover={{ background: "gray.200" }}
         >
           <Avatar boxSize={8} bgColor="#000" mr="10px" />
