@@ -1,5 +1,6 @@
 import { Flex, Text } from "@chakra-ui/react";
 import IdeaGroup from "../components/IdeaGroup";
+import Menu from "../components/Menu";
 
 function Main() {
   return (
@@ -16,9 +17,14 @@ function Main() {
         >
           <Text>xD</Text>
         </Flex>
-        <IdeaGroup />
-        <IdeaGroup />
-        <IdeaGroup />
+        <Flex flexDirection="row">
+          <Menu />
+          <Flex flexDirection="column" marginLeft="48px">
+            <IdeaGroup />
+            <IdeaGroup />
+            <IdeaGroup />
+          </Flex>
+        </Flex>
       </Flex>
     </>
   );
