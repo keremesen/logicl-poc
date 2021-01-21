@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 
 const Auth = () => {
   const auth = useAuth();
-  console.log(auth.user)
+
   return (
     <Flex direction="column" h="93vh" p={16}>
       <Flex

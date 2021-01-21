@@ -31,7 +31,17 @@ function useProvideAuth() {
     return firebase
       .auth()
       .signInWithPopup(new firebase.auth.GithubAuthProvider())
-      .then((response) => {
+      .then(async (response) => {
+        if(response.additionalUserInfo.isNewUser){
+          const formattedUserData = await formatUser(response.user);
+          const user = {
+              ...formattedUserData,
+              createdAt: new Date().toISOString(),
+              sharedIdeas: [],
+              interactedIdeas: []
+          }
+          await firebase.firestore().collection('users').doc(user.uid).set(user);
+        }
         handleUser(response.user);
       });
   };
