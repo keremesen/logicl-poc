@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
 
+
 import firebase from "../libs/firebase";
 
 const authContext = createContext();
@@ -41,6 +42,7 @@ function useProvideAuth() {
               interactedIdeas: []
           }
           await firebase.firestore().collection('users').doc(user.uid).set(user);
+          
         }
         handleUser(response.user);
       });
