@@ -2,6 +2,24 @@ import { Flex, Text } from "@chakra-ui/react";
 import IdeaGroup from "../components/IdeaGroup";
 import Menu from "../components/Menu";
 
+const ideas = [
+  {
+    title: "basasdasdasdasdasdlik",
+    avatar: "",
+  },
+  {
+    title: "basliasdasdask",
+    avatar: "",
+  },
+  {
+    title: "baslasdasdasik",
+    avatar: "",
+  },
+  {
+    title: "basliasfasdgfasdgk",
+    avatar: "",
+  },
+];
 function Main() {
   return (
     <>
@@ -20,9 +38,10 @@ function Main() {
         <Flex flexDirection="row">
           <Menu />
           <Flex flexDirection="column" marginLeft="48px">
-            <IdeaGroup />
-            <IdeaGroup />
-            <IdeaGroup />
+            <IdeaGroup list={ideas} title="Emre Mert" />
+            <IdeaGroup list={ideas} title="Emre Mert" />
+            <IdeaGroup list={ideas} title="Emre Mert" />
+            <IdeaGroup list={ideas} title="Emre Mert" />
           </Flex>
         </Flex>
       </Flex>

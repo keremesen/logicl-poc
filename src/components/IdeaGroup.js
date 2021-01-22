@@ -1,10 +1,12 @@
 import React from "react";
 import { Flex, Heading, Avatar } from "@chakra-ui/react";
-const IdeaGroup = () => {
+
+const IdeaGroup = ({ title, list }) => {
+
   return (
     <Flex direction="column" my="30px">
       <Heading size="lg" mb="5px">
-        Neden Olmasın
+        {title}
       </Heading>
       <Flex
         direction="column"
@@ -15,73 +17,26 @@ const IdeaGroup = () => {
         transition="200ms ease-in-out"
         boxShadow="xl"
       >
-        <Flex
-          direction="row"
-          bgColor="transparent"
-          p="15px"
-          align="center"
-          borderRadius="15px"
-          m="5px"
-          transition="200ms ease-in-out"
-          cursor="pointer"
-          _hover={{ background: "gray.200" }}
-        >
-          <Avatar boxSize={8} bgColor="#000" mr="10px" />
-          <Heading size="md">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          </Heading>
-        </Flex>
-
-        <Flex
-          direction="row"
-          bgColor="transparent"
-          p="15px"
-          align="center"
-          borderRadius="15px"
-          m="5px"
-          transition="200ms ease-in-out"
-          cursor="pointer"
-          _hover={{ background: "gray.200" }}
-        >
-          <Avatar boxSize={8} bgColor="#000" mr="10px" />
-          <Heading size="md">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          </Heading>
-        </Flex>
-
-        <Flex
-          direction="row"
-          bgColor="transparent"
-          p="15px"
-          align="center"
-          borderRadius="15px"
-          m="5px"
-          transition="200ms ease-in-out"
-          cursor="pointer"
-          _hover={{ background: "gray.200" }}
-        >
-          <Avatar boxSize={8} bgColor="#000" mr="10px" />
-          <Heading size="md">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          </Heading>
-        </Flex>
-
-        <Flex
-          direction="row"
-          bgColor="transparent"
-          p="15px"
-          align="center"
-          borderRadius="15px"
-          m="5px"
-          transition="200ms ease-in-out"
-          cursor="pointer"
-          _hover={{ background: "gray.200" }}
-        >
-          <Avatar boxSize={8} bgColor="#000" mr="10px" />
-          <Heading size="md">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          </Heading>
-        </Flex>
+        {list.map((idea,index) => (
+          <Flex
+            key={index}
+            direction="row"
+            bgColor="transparent"
+            p="15px"
+            align="center"
+            borderRadius="15px"
+            m="5px"
+            transition="200ms ease-in-out"
+            cursor="pointer"
+            _hover={{ background: "gray.200" }}
+            
+          >
+            <Avatar boxSize={8} bgColor="#000" mr="10px" src={idea.avatar} />
+            <Heading size="md" _selection={{background:"teal.300"}}>
+              {idea.title}
+            </Heading>
+          </Flex>
+        ))}
       </Flex>
     </Flex>
   );

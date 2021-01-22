@@ -13,22 +13,30 @@ const ExplorePage = () => {
         flexDirection="column"
         align="center"
       >
-        <IdeaPreview />
-        <IdeaPreview />
-        <IdeaPreview />
-        <IdeaPreview />
-        <IdeaPreview />
-        <IdeaPreview />
-        <IdeaPreview />
-        <IdeaPreview />
-        <IdeaPreview />
-        <IdeaPreview />
-        <IdeaPreview />
-        <IdeaPreview />
-        <IdeaPreview />
-        <IdeaPreview />
-        <IdeaPreview />
-        <IdeaPreview />
+        <IdeaPreview
+          title="Baslik"
+          text="lorem ipsum gerisini bbilmiyombil miyombilmiyom bilmiyomi bilmiyom lmiyom"
+          avatar=""
+          rating="31"
+        />
+        <IdeaPreview
+          title="Baslik"
+          text="lorem ipsum gerisini bilmiyom"
+          avatar=""
+          rating="31"
+        />
+        <IdeaPreview
+          title="Baslik"
+          text="lorem ipsum gerisini bilmiyom"
+          avatar=""
+          rating="31"
+        />
+        <IdeaPreview
+          title="Baslik"
+          text="lorem ipsum gerisini bilmiyom"
+          avatar=""
+          rating="31"
+        />
       </Flex>
     </Flex>
   );
