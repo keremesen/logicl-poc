@@ -5,6 +5,7 @@ import Main from "./Pages/Main";
 import Auth from "./Pages/Auth";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
+import ShareIdea from "./Pages/ShareIdea";
 
 function App() {
   return (
@@ -13,11 +14,11 @@ function App() {
         <NavBar />
         <Flex
           w="100vw"
-          direction="row"
+          direction="column"
           align="center"
-          justify="center"
-          height="auto"
+          height="100%"
           bgColor="#CBD5E0"
+          style={{ minHeight: `calc(100vh - 60px)` }}
         >
           <Switch>
             <Route path="/" exact>
@@ -26,6 +27,9 @@ function App() {
 
             <Route path="/explore">
               <ExplorePage />
+            </Route>
+            <Route path="/share">
+              <ShareIdea />
             </Route>
 
             <Route path="/auth">

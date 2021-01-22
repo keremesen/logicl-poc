@@ -9,7 +9,7 @@ const NavBar = () => {
     <Flex
       as="nav"
       w="100vw"
-      h="7vh"
+      h="60px"
       bgColor="#FEEBC8"
       align="center"
       justify="space-between"
@@ -28,7 +28,11 @@ const NavBar = () => {
         <BellIcon boxSize={8} />
 
         <Link to="/auth">
-          <Avatar boxSize={8} bgColor="#000" src={auth.user ? auth.user.photoUrl : ''} />
+          <Avatar
+            boxSize={8}
+            bgColor="#000"
+            src={auth.user ? auth.user.photoUrl : ""}
+          />
         </Link>
       </Stack>
     </Flex>
