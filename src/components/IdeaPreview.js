@@ -3,7 +3,7 @@ import React from "react";
 import { Avatar } from "@chakra-ui/react";
 import { StarIcon } from "@chakra-ui/icons";
 
-const IdeaPreview = () => {
+const IdeaPreview = ({ title, text, avatar, rating }) => {
   return (
     <Flex
       w="70%"
@@ -14,19 +14,18 @@ const IdeaPreview = () => {
       boxShadow="lg"
       cursor="pointer"
       _hover={{ background: "gray.300" }}
+      justifyContent="space-between"
+      padding={4}
     >
-      <Avatar boxSize={8} bgColor="#000" mr="10px" ml="3%" mt="2%" />
-      <Flex direction="column">
-        <Heading size="md" mt="20px">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        </Heading>
-        <Text fontSize="lg">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sit
-          amet convallis tellus, sed placerat odio.
-        </Text>
+      <Flex width="100%">
+        <Avatar boxSize={8} bgColor="#000" src={avatar} mr={4} />
+        <Flex direction="column">
+          <Heading size="md">{title}</Heading>
+          <Text fontSize="lg">{text}</Text>
+        </Flex>
       </Flex>
       <Flex mr="10px" ml="130px" mt="2%">
-        <Text mr="5px">5</Text>
+        <Text mr="5px">{rating}</Text>
         <StarIcon w={5} h={6} />
       </Flex>
     </Flex>
