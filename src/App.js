@@ -6,6 +6,7 @@ import Auth from "./Pages/Auth";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import ShareIdea from "./Pages/ShareIdea";
+import Profile from "./Pages/Profile";
 
 function App() {
   return (
@@ -34,6 +35,9 @@ function App() {
 
             <Route path="/auth">
               <Auth />
+            </Route>
+            <Route path="/profile">
+              <Profile />
             </Route>
           </Switch>
         </Flex>
