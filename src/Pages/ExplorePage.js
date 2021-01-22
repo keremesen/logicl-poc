@@ -1,8 +1,30 @@
 import { Flex } from "@chakra-ui/react";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import IdeaPreview from "../components/IdeaPreview";
+import firebase from "../libs/firebase";
 
 const ExplorePage = () => {
+  const [ideas, setIdeas] = useState([]);
+
+  useEffect(() => {
+    const unsubscribe = firebase
+      .firestore()
+      .collection("ideas")
+      .where("status", "==", "approved")
+      .orderBy('createdAt', 'desc')
+      .onSnapshot((docSnapshot) => {
+        let tempIdeas = [];
+        docSnapshot.forEach((snapshot) => {
+          tempIdeas.push(snapshot.data());
+        });
+        tempIdeas.sort();
+        setIdeas(tempIdeas);
+      });
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
   return (
     <Flex direction="column" align="center" minH="100vh">
       <Flex
@@ -13,30 +35,17 @@ const ExplorePage = () => {
         flexDirection="column"
         align="center"
       >
-        <IdeaPreview
-          title="Baslik"
-          text="lorem ipsum gerisini bbilmiyombil miyombilmiyom bilmiyomi bilmiyom lmiyom"
-          avatar=""
-          rating="31"
-        />
-        <IdeaPreview
-          title="Baslik"
-          text="lorem ipsum gerisini bilmiyom"
-          avatar=""
-          rating="31"
-        />
-        <IdeaPreview
-          title="Baslik"
-          text="lorem ipsum gerisini bilmiyom"
-          avatar=""
-          rating="31"
-        />
-        <IdeaPreview
-          title="Baslik"
-          text="lorem ipsum gerisini bilmiyom"
-          avatar=""
-          rating="31"
-        />
+        {ideas.map((idea,index) => {
+          return (
+            <IdeaPreview
+              key={index}
+              title={idea.title}
+              text={idea.desc}
+              avatar={idea.authorPhotoUrl ? idea.authorPhotoUrl : ''}
+              rating={idea.counter !== 0 ? idea.like / idea.counter : '0'}
+            />
+          );
+        })}
       </Flex>
     </Flex>
   );

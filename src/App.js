@@ -22,6 +22,7 @@ function App() {
           style={{ minHeight: `calc(100vh - 60px)` }}
         >
           <Switch>
+
             <Route path="/" exact>
               <Main />
             </Route>
@@ -29,6 +30,7 @@ function App() {
             <Route path="/explore">
               <ExplorePage />
             </Route>
+
             <Route path="/share">
               <ShareIdea />
             </Route>
@@ -36,9 +38,15 @@ function App() {
             <Route path="/auth">
               <Auth />
             </Route>
+
             <Route path="/profile">
               <Profile />
             </Route>
+
+            <Route path="/share">
+              <ShareIdea />
+            </Route>
+            
           </Switch>
         </Flex>
       </AuthProvider>
