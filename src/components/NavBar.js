@@ -16,13 +16,17 @@ const NavBar = () => {
       px="32px"
     >
       <Flex>
-        <Heading>
-          <Link to="/">logicl</Link>
-        </Heading>
+        <Link to="/">
+          <Heading>logicl</Heading>
+        </Link>
       </Flex>
-      <Button backgroundColor="teal.100" w="100px">
-        <Link to="/explore">Explore</Link>
-      </Button>
+
+      <Link to="/explore">
+        <Button backgroundColor="teal.100" w="100px">
+          Explore
+        </Button>
+      </Link>
+
       <Stack direction="row" spacing="16px" align="center">
         <AddIcon boxSize={6} />
         <BellIcon boxSize={8} />
