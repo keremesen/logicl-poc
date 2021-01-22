@@ -1,5 +1,6 @@
 import { Button, Flex, Heading } from "@chakra-ui/react";
 import React from "react";
+import { Redirect } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const Auth = () => {
@@ -7,32 +8,36 @@ const Auth = () => {
 
   return (
     <Flex direction="column" h="93vh" p={16}>
-      <Flex
-        direction="column"
-        align="center"
-        bgColor="gray.200"
-        py={16}
-        px={32}
-        borderRadius={8}
-        boxShadow="md"
-      >
-        <Heading>Authentication</Heading>
-        <Flex my={4} direction="column">
-          {auth.user ? (
-            <>
-              <Button mx={4} colorScheme="gray" onClick={auth.signout}>
-                Sign Out
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button mx={4} colorScheme="gray" onClick={auth.signinWithGitHub}>
+      {!auth.user ? (
+        <>
+          <Flex
+            direction="column"
+            align="center"
+            bgColor="gray.200"
+            py={16}
+            px={32}
+            borderRadius={8}
+            boxShadow="md"
+          >
+            <Heading>Authentication</Heading>
+            <Flex my={4} direction="column">
+              <Button
+                mx={4}
+                colorScheme="gray"
+                onClick={() => {
+                  auth.signinWithGitHub();
+                }}
+              >
                 Sign In with Github
               </Button>
-            </>
-          )}
-        </Flex>
-      </Flex>
+            </Flex>
+          </Flex>
+        </>
+      ) : (
+        <>
+          <Redirect to="/" />
+        </>
+      )}
     </Flex>
   );
 };

@@ -1,4 +1,5 @@
-import { Avatar, Flex, FormLabel, Heading } from "@chakra-ui/react";
+import { Avatar, Button, Flex, Heading, Link } from "@chakra-ui/react";
+import React from "react";
 import { useAuth } from "../context/AuthContext";
 
 const Profile = () => {
@@ -13,19 +14,31 @@ const Profile = () => {
       direction="column"
       align="flex-start"
     >
-      <Heading m={5}>Profile</Heading>
-      <Flex direction="row" m={6}>
-        <Avatar
-          boxSize={48}
-          bgColor="#000"
-          src={auth.user ? auth.user.photoUrl : ""}
-        />
-        <Flex direction="column" m={8}>
-          <FormLabel>{auth.user ? auth.user.name : ""}</FormLabel>
-
-          <FormLabel>{auth.user ? auth.user.email : ""}</FormLabel>
-        </Flex>
-      </Flex>
+      {auth.user ? (
+        <>
+          <Heading m={5}>Profile</Heading>
+          <Flex direction="row" m={6}>
+            <Avatar
+              boxSize={48}
+              bgColor="#000"
+              src={auth.user.photoUrl}
+            />
+            <Flex direction="column" m={8}>
+              <Heading>{auth.user.name}</Heading>
+              <Heading>{auth.user.email}</Heading>
+              <Button mx={4} colorScheme="gray" onClick={auth.signout}>
+                Sign Out
+              </Button>
+            </Flex>
+          </Flex>
+        </>
+      ) : (
+        <>
+          <Heading m={5}>
+            You're not signed in. Go to <Link onClick={() => window.location = "/auth"}>auth page</Link>
+          </Heading>
+        </>
+      )}
     </Flex>
   );
 };

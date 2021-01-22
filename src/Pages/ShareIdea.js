@@ -5,15 +5,21 @@ import {
   Heading,
   Input,
   Textarea,
-  Stack,
   Radio,
   RadioGroup,
   Button,
 } from "@chakra-ui/react";
-import React from "react";
+
+import React, { useState } from "react";
+import { useAuth } from "../context/AuthContext";
+import firebase from "../libs/firebase";
 
 const ShareIdea = () => {
-  const [value, setValue] = React.useState("1");
+  const [title, setTitle] = useState("");
+  const [desc, setDesc] = useState("");
+  const [category, setCategory] = useState("");
+
+  const user = useAuth().user;
   return (
     <Flex
       flexDirection="column"
@@ -26,19 +32,68 @@ const ShareIdea = () => {
       <Heading>Add Idea</Heading>
       <FormControl isRequired my={5}>
         <FormLabel>Title</FormLabel>
-        <Input placeholder="Title" />
+        <Input
+          placeholder="Title"
+          onChange={(e) => setTitle(e.target.value)}
+          value={title}
+        />
+
         <FormLabel mt={5}>Description</FormLabel>
-        <Textarea placeholder="Desc" />
+        <Textarea
+          placeholder="Desc"
+          onChange={(e) => setDesc(e.target.value)}
+          value={desc}
+        />
+
         <FormLabel mt={5}>Category</FormLabel>
-        <RadioGroup onChange={setValue} value={value} >
-          <Stack direction="row">
-            <Radio value="1">Web</Radio>
-            <Radio value="2">Mobil</Radio>
-            <Radio value="3">:D</Radio>
-          </Stack>
+        <RadioGroup onChange={setCategory} value={category}>
+          <Radio value="Web">Web</Radio>
+          <Radio ml={4} value="Mobile">
+            Mobile
+          </Radio>
+          <Radio ml={4} value="Design">
+            Design
+          </Radio>
         </RadioGroup>
       </FormControl>
-      <Button mt={4} alignSelf="flex-end" colorScheme="teal" padding={6}>
+
+      <Button
+        isDisabled={title === "" || desc === "" || category === ""}
+        mt={4}
+        alignSelf="flex-end"
+        colorScheme="teal"
+        padding={6}
+        onClick={async () => {
+          const ideaData = {
+            authorId: user.uid,
+            authorPhotoUrl: user.photoUrl,
+            title,
+            desc,
+            createdAt: new Date().toISOString(),
+            like: 0,
+            disslike: 0,
+            counter: 0,
+            category,
+            commentsId: "",
+            status: "approved",
+          };
+          const ideaDoc = await firebase
+            .firestore()
+            .collection("ideas")
+            .add(ideaData);
+          firebase
+            .firestore()
+            .collection("users")
+            .doc(user.uid)
+            .update({
+              sharedIdes: firebase.firestore.FieldValue.arrayUnion(ideaDoc),
+            })
+            .then(() => {
+              window.location = "/explore";
+            })
+            .catch((err) => console.log(err));
+        }}
+      >
         +Add
       </Button>
     </Flex>
@@ -46,3 +101,16 @@ const ShareIdea = () => {
 };
 
 export default ShareIdea;
+
+/* 
+.then(() => {
+              toast({
+                title: "Idea shared.",
+                description:
+                  "We've shared your idea for you. After validation, your idea will be public.",
+                status: "success",
+                duration: 5000,
+                isClosable: true,
+              });
+            })
+*/
