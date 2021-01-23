@@ -15,20 +15,26 @@ const NavBar = () => {
       justifyContent="center"
     >
       <Flex
-      bgColor="#FEEBC8"
-      h="60px"
-      align="center"
-      justify="space-between"
-      px="8px"
-      w="1080px">
+        bgColor="#FEEBC8"
+        h="60px"
+        align="center"
+        justify="space-between"
+        px="8px"
+        w="1080px"
+      >
         <Flex>
           <Heading>
-            <Link to="/" style={{padding:'6px 16px 6px 0px'}}>logicl</Link>
+            <Link to="/" style={{ padding: "6px 16px 6px 0px" }}>
+              logicl
+            </Link>
           </Heading>
         </Flex>
-        <Button backgroundColor="teal.100" w="100px">
-          <Link to="/explore" style={{padding:"12px 22px"}}>Explore</Link>
+        <Button backgroundColor="teal.200" w="100px">
+          <Link to="/explore" style={{ padding: "12px 22px" }}>
+            Explore
+          </Link>
         </Button>
+
         <Stack direction="row" spacing="16px" align="center">
           <Link to={auth.user ? "/share" : "/auth"}>
             <AddIcon boxSize={6} />
