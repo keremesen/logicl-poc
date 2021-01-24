@@ -15,10 +15,11 @@ const ExplorePage = () => {
       .onSnapshot((docSnapshot) => {
         let tempIdeas = [];
         docSnapshot.forEach((snapshot) => {
-          tempIdeas.push(snapshot.data());
+          tempIdeas.push({id:snapshot.id, ...snapshot.data()});
         });
         tempIdeas.sort();
         setIdeas(tempIdeas);
+        console.log(tempIdeas)
       });
     return () => {
       unsubscribe();
@@ -34,6 +35,7 @@ const ExplorePage = () => {
         h="100%"
         flexDirection="column"
         align="center"
+      
       >
         {ideas.map((idea,index) => {
           return (
@@ -43,6 +45,7 @@ const ExplorePage = () => {
               text={idea.desc}
               avatar={idea.authorPhotoUrl ? idea.authorPhotoUrl : ''}
               rating={idea.counter !== 0 ? idea.like / idea.counter : '0'}
+              id={idea.id}
             />
           );
         })}

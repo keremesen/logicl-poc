@@ -7,6 +7,8 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import ShareIdea from "./Pages/ShareIdea";
 import Profile from "./Pages/Profile";
+import IdeaPreview from "./components/IdeaPreview";
+import IdeaDetail from "./components/IdeaDetail";
 
 function App() {
   return (
@@ -42,9 +44,13 @@ function App() {
               <Profile />
             </Route>
 
-            <Route path="/share">
-              <ShareIdea />
+            <Route path="/i/:ideaId">
+              <IdeaPreview />
             </Route>
+
+            
+
+          
           </Switch>
         </Flex>
       </AuthProvider>
