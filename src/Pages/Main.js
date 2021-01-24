@@ -1,6 +1,15 @@
-import { Flex, Text } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import IdeaGroup from "../components/IdeaGroup";
 import Menu from "../components/Menu";
+import BannerIdea from "../components/BannerIdea";
+
+const bannerIdea = {
+  title: "banneridea",
+  avatar: "",
+  text:
+    "Daha geniş bir ifadeyle paragraf; bir duyguyu, bir düşünceyi bir isteği, bir durumu, bir öneriyi, olayın bir yönünü, yalnızca bir yönüyle anlatım tekniklerinden ve düşünceyi geliştirme yollarından yararlanarak anlatan yazı türüdür. Kelimeler cümleleri, cümleler paragrafları, paragraflar da yazıları oluşturur.",
+  rating: "5",
+};
 
 const ideas = [
   {
@@ -24,17 +33,7 @@ function Main() {
   return (
     <>
       <Flex w="1080px" h="100%" bgColor="#fff" p="64px" direction="column">
-        <Flex
-          w="100%"
-          h="350px"
-          bgColor="gray.300"
-          borderRadius="12px"
-          justify="center"
-          align="center"
-          textAlign="center"
-        >
-          <Text>xD</Text>
-        </Flex>
+        <BannerIdea idea={bannerIdea} />
         <Flex flexDirection="row">
           <Menu />
           <Flex flexDirection="column" marginLeft="48px">

@@ -16,6 +16,7 @@ const IdeaGroup = ({ title, list }) => {
         borderRadius="15px"
         transition="200ms ease-in-out"
         boxShadow="xl"
+        _hover={{bg:'gray.300'}}
       >
         {list.map((idea,index) => (
           <Flex
@@ -28,7 +29,7 @@ const IdeaGroup = ({ title, list }) => {
             m="5px"
             transition="200ms ease-in-out"
             cursor="pointer"
-            _hover={{ background: "gray.200" }}
+            _hover={{ background: "gray.100" }}
             
           >
             <Avatar boxSize={8} bgColor="#000" mr="10px" src={idea.avatar} />
