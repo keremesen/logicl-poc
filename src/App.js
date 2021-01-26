@@ -45,10 +45,6 @@ function App() {
             </Route>
 
             <Route path="/i/:ideaId" component={IdeaDetail} />
-
-            
-
-          
           </Switch>
         </Flex>
       </AuthProvider>

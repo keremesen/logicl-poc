@@ -27,7 +27,7 @@ const ExplorePage = () => {
   }, []);
 
   if (ideas.length < 1) {
-    return <FullScreenSpinner />
+    return <FullScreenSpinner />;
   }
 
   return (
@@ -49,6 +49,7 @@ const ExplorePage = () => {
               avatar={idea.authorPhotoUrl ? idea.authorPhotoUrl : ""}
               rating={idea.counter !== 0 ? idea.like / idea.counter : "0"}
               id={idea.id}
+              counter={idea.counter}
             />
           );
         })}

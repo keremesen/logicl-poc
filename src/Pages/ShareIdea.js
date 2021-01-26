@@ -71,7 +71,7 @@ const ShareIdea = () => {
           let minute = new Date().getMinutes();
           let second = new Date().getSeconds();
 
-          let time = `${day}-${month}-${year} ${hour}:${minute}:${second}`
+          let time = `${day}-${month}-${year} ${hour}:${minute}:${second}`;
 
           const ideaData = {
             authorId: user.uid,

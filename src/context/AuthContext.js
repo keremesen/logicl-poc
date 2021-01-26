@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
 
-
 import firebase from "../libs/firebase";
 
 const authContext = createContext();
@@ -33,16 +32,19 @@ function useProvideAuth() {
       .auth()
       .signInWithPopup(new firebase.auth.GithubAuthProvider())
       .then(async (response) => {
-        if(response.additionalUserInfo.isNewUser){
+        if (response.additionalUserInfo.isNewUser) {
           const formattedUserData = await formatUser(response.user);
           const user = {
-              ...formattedUserData,
-              createdAt: new Date().toISOString(),
-              sharedIdeas: [],
-              interactedIdeas: []
-          }
-          await firebase.firestore().collection('users').doc(user.uid).set(user);
-          
+            ...formattedUserData,
+            createdAt: new Date().toISOString(),
+            sharedIdeas: [],
+            interactedIdeas: [],
+          };
+          await firebase
+            .firestore()
+            .collection("users")
+            .doc(user.uid)
+            .set(user);
         }
         handleUser(response.user);
       });
