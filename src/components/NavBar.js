@@ -13,6 +13,7 @@ const NavBar = () => {
       bgColor="#FEEBC8"
       align="center"
       justifyContent="center"
+      zIndex='10'
     >
       <Flex
         bgColor="#FEEBC8"

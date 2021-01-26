@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react";
+import { CSSReset, Flex } from "@chakra-ui/react";
 import NavBar from "./components/NavBar";
 import ExplorePage from "./Pages/ExplorePage";
 import Main from "./Pages/Main";
@@ -7,13 +7,13 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import ShareIdea from "./Pages/ShareIdea";
 import Profile from "./Pages/Profile";
-import IdeaPreview from "./components/IdeaPreview";
-import IdeaDetail from "./components/IdeaDetail";
+import IdeaDetail from "./Pages/IdeaDetail";
 
 function App() {
   return (
     <Router>
       <AuthProvider>
+        <CSSReset />
         <NavBar />
         <Flex
           w="100vw"
@@ -44,9 +44,7 @@ function App() {
               <Profile />
             </Route>
 
-            <Route path="/i/:ideaId">
-              <IdeaPreview />
-            </Route>
+            <Route path="/i/:ideaId" component={IdeaDetail} />
 
             
 

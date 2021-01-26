@@ -64,12 +64,22 @@ const ShareIdea = () => {
         colorScheme="teal"
         padding={6}
         onClick={async () => {
+          let day = new Date().getDate();
+          let month = new Date().getMonth();
+          let year = new Date().getFullYear();
+          let hour = new Date().getHours();
+          let minute = new Date().getMinutes();
+          let second = new Date().getSeconds();
+
+          let time = `${day}-${month}-${year} ${hour}:${minute}:${second}`
+
           const ideaData = {
             authorId: user.uid,
+            authorName: user.name,
             authorPhotoUrl: user.photoUrl,
             title,
             desc,
-            createdAt: new Date().toISOString(),
+            createdAt: time,
             like: 0,
             disslike: 0,
             counter: 0,
