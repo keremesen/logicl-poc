@@ -166,8 +166,8 @@ const IdeaDetail = ({ match, history }) => {
                       .doc(ideaId)
                       .update({
                         feelingsId: response.id,
-                        counter: idea.counter + 1,
-                        like: idea.like + 1,
+                        counter: firebase.firestore.FieldValue.increment(1),
+                        like: firebase.firestore.FieldValue.increment(1),
                       })
                       .then((res) => setIsInteractedBefore(true));
                   else if (feeling === -1)
@@ -175,8 +175,8 @@ const IdeaDetail = ({ match, history }) => {
                       .doc(ideaId)
                       .update({
                         feelingsId: response.id,
-                        counter: idea.counter + 1,
-                        disslike: idea.disslike + 1,
+                        counter: firebase.firestore.FieldValue.increment(1),
+                        disslike: firebase.firestore.FieldValue.increment(1),
                       })
                       .then((res) => setIsInteractedBefore(true));
                 });
@@ -194,16 +194,16 @@ const IdeaDetail = ({ match, history }) => {
                     db.collection("ideas")
                       .doc(ideaId)
                       .update({
-                        counter: idea.counter + 1,
-                        like: idea.like + 1,
+                        counter: firebase.firestore.FieldValue.increment(1),
+                        like: firebase.firestore.FieldValue.increment(1),
                       })
                       .then((res) => setIsInteractedBefore(true));
                   else
                     db.collection("ideas")
                       .doc(ideaId)
                       .update({
-                        counter: idea.counter + 1,
-                        disslike: idea.disslike + 1,
+                        counter: firebase.firestore.FieldValue.increment(1),
+                        disslike: firebase.firestore.FieldValue.increment(1),
                       })
                       .then((res) => setIsInteractedBefore(true));
                 });
