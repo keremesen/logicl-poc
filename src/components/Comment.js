@@ -5,7 +5,7 @@ const Comment = ({ comment, feeling }) => {
   return (
     <Flex
       p={4}
-      bgColor={feeling.feeling === 1 ? "blue.100" : "red.100"}
+      bgColor={feeling?.feeling === 1 ? "blue.100" : "red.100"}
       boxShadow="base"
       width="70%"
       borderRadius="6px"

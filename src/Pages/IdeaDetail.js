@@ -143,7 +143,8 @@ const IdeaDetail = ({ match, history }) => {
           isDisabled={comment.length > 362}
           onClick={() => {
             if (comment.length > 362) return;
-
+            
+            setLoading(true);
             //feeling obj
             const tempFeeling = {
               authorId: user.uid,
@@ -169,7 +170,7 @@ const IdeaDetail = ({ match, history }) => {
                         like: idea.like + 1,
                       })
                       .then((res) => setIsInteractedBefore(true));
-                  else
+                  else if (feeling === -1)
                     db.collection("ideas")
                       .doc(ideaId)
                       .update({
@@ -275,6 +276,7 @@ const IdeaDetail = ({ match, history }) => {
                 });
             }
             //first time comment end
+            setLoading(false);
           }}
         >
           Comment
