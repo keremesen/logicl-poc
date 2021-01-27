@@ -2,7 +2,7 @@ import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import { Flex, Text, Heading, Avatar, Button, HStack } from "@chakra-ui/react";
 import { useAuth } from "../context/AuthContext";
 import FormatNumber from "../utils/formatNumber";
-
+import { Link } from "react-router-dom";
 const BannerIdea = ({
   idea,
   isBanner = true,
@@ -21,6 +21,8 @@ const BannerIdea = ({
       _hover={isBanner && { bg: "gray.100" }}
       cursor={isBanner && "pointer"}
       position="relative"
+      as={isBanner && Link}
+      to={isBanner && `/i/${idea.id}`}
     >
       {!isBanner && (
         <HStack position="absolute" bottom="2%" left="1%">

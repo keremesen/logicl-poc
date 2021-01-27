@@ -1,46 +1,59 @@
+import React, { useState, useEffect } from "react";
 import { Flex } from "@chakra-ui/react";
 import IdeaGroup from "../components/IdeaGroup";
-import Menu from "../components/Menu";
 import BannerIdea from "../components/BannerIdea";
+import { db } from "../libs/firebase";
+import FullScreenSpinner from "../components/FullScreenSpinner";
 
-const bannerIdea = {
-  title: "banneridea",
-  avatar: "",
-  text:
-    "Daha geniş bir ifadeyle paragraf; bir duyguyu, bir düşünceyi bir isteği, bir durumu, bir öneriyi, olayın bir yönünü, yalnızca bir yönüyle anlatım tekniklerinden ve düşünceyi geliştirme yollarından yararlanarak anlatan yazı türüdür. Kelimeler cümleleri, cümleler paragrafları, paragraflar da yazıları oluşturur.",
-  rating: "5",
-};
-
-const ideas = [
-  {
-    title: "basasdasdasdasdasdlik",
-    avatar: "",
-  },
-  {
-    title: "basliasdasdask",
-    avatar: "",
-  },
-  {
-    title: "baslasdasdasik",
-    avatar: "",
-  },
-  {
-    title: "basliasfasdgfasdgk",
-    avatar: "",
-  },
-];
 function Main() {
+  const [banner, setBanner] = useState(null);
+  const [todaysHit, setTodaysHit] = useState({ displayText: "", hits: [] });
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    db.collection("ideas")
+      .where("isBanner", "==", true)
+      .get()
+      .then((res) => {
+        if (res.docs.length > 0) {
+          const tempBanner = { id: res.docs[0].id, ...res.docs[0].data() };
+          setBanner(tempBanner);
+        }
+        db.collection("selecteds")
+          .doc("todays-hits")
+          .get()
+          .then((res) => {
+            const selectionName = res.data().displayText;
+            const ideaIds = res.data().ideas;
+            ideaIds.map((ideaId) => {
+              db.collection("ideas")
+                .doc(ideaId)
+                .get()
+                .then((res) => {
+                  const idea = { id: res.id, ...res.data() };
+                  setTodaysHit({
+                    displayText: selectionName,
+                    hits: [idea, ...todaysHit.hits],
+                  });
+                  setLoading(false);
+                });
+            });
+          });
+      });
+  }, []);
+
+  if (loading) {
+    return <FullScreenSpinner />;
+  }
+
   return (
     <>
-      <Flex w="1080px" h="100%" bgColor="#fff" p="64px" direction="column">
-        <BannerIdea idea={bannerIdea} />
-        <Flex flexDirection="row">
-          <Flex flexDirection="column" marginLeft="48px">
-            <IdeaGroup list={ideas} title="Emre Mert" />
-            <IdeaGroup list={ideas} title="Emre Mert" />
-            <IdeaGroup list={ideas} title="Emre Mert" />
-            <IdeaGroup list={ideas} title="Emre Mert" />
-          </Flex>
+      <Flex w="1080px" h="100%" bgColor="#fff" p="24px" direction="column">
+        <BannerIdea idea={banner} />
+        <Flex flexDirection="column" mx={4}>
+          <IdeaGroup list={todaysHit.hits} title={todaysHit.displayText} />
         </Flex>
       </Flex>
     </>
