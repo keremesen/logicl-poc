@@ -1,10 +1,18 @@
-import { Button, Flex, Text, Textarea, useToast } from "@chakra-ui/react";
-import React, { useEffect, useRef, useState } from "react";
+import {
+  Button,
+  Flex,
+  Heading,
+  Text,
+  Textarea,
+  useToast,
+} from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
 import { db } from "../libs/firebase";
 import FullScreenSpinner from "../components/FullScreenSpinner";
 import BannerIdea from "../components/BannerIdea";
 import firebase from "../libs/firebase";
 import { useAuth } from "../context/AuthContext";
+import Comment from "../components/Comment";
 
 const IdeaDetail = ({ match, history }) => {
   const [idea, setIdea] = useState(null);
@@ -50,6 +58,7 @@ const IdeaDetail = ({ match, history }) => {
                       setFeeling(feeling.feeling);
                       setIsInteractedBefore(true);
                     }
+                    return null;
                   });
                 }
               }
@@ -61,7 +70,7 @@ const IdeaDetail = ({ match, history }) => {
         }
       });
     setLoading(false);
-  }, [user]);
+  }, [ideaId, user]);
 
   if (loading) {
     return <FullScreenSpinner />;
@@ -212,6 +221,8 @@ const IdeaDetail = ({ match, history }) => {
             //comment obj
             const tempComment = {
               authorId: user.uid,
+              authorName: user.name,
+              authorPhotoUrl: user.photoUrl,
               comment: comment,
               createdAt: time,
             };
@@ -233,6 +244,7 @@ const IdeaDetail = ({ match, history }) => {
                     .update({ commentsId: commentDocId })
                     .then((res) => {
                       setIsInteractedBefore(true);
+                      setCommentsPlural([tempComment, ...commentsPlural]);
                       toast({
                         title: "Comment sent succesfully.",
                         description: "Thank for your feedback.",
@@ -252,6 +264,7 @@ const IdeaDetail = ({ match, history }) => {
                 })
                 .then((res) => {
                   setIsInteractedBefore(true);
+                  setCommentsPlural([tempComment, ...commentsPlural]);
                   toast({
                     title: "Comment sent succesfully.",
                     description: "Thank for your feedback.",
@@ -266,6 +279,32 @@ const IdeaDetail = ({ match, history }) => {
         >
           Comment
         </Button>
+      </Flex>
+      <Flex
+        bgColor="gray.50"
+        width="100%"
+        padding={4}
+        mt={6}
+        boxShadow="base"
+        flexDirection="column"
+      >
+        <Heading>Comments</Heading>
+        <Flex flexDirection="column">
+          {commentsPlural.map((comment) => {
+            const commenterId = comment.authorId;
+            const feeling = feelingsPlural.find(
+              (e) => e.authorId === commenterId
+            );
+
+            return (
+              <Comment
+                key={comment.authorId}
+                feeling={feeling}
+                comment={comment}
+              />
+            );
+          })}
+        </Flex>
       </Flex>
     </Flex>
   );

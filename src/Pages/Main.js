@@ -35,7 +35,6 @@ function Main() {
       <Flex w="1080px" h="100%" bgColor="#fff" p="64px" direction="column">
         <BannerIdea idea={bannerIdea} />
         <Flex flexDirection="row">
-          <Menu />
           <Flex flexDirection="column" marginLeft="48px">
             <IdeaGroup list={ideas} title="Emre Mert" />
             <IdeaGroup list={ideas} title="Emre Mert" />

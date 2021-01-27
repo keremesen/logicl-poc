@@ -1,12 +1,13 @@
-import { Flex } from "@chakra-ui/react";
+import { Flex, Heading } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import FullScreenSpinner from "../components/FullScreenSpinner";
 import IdeaPreview from "../components/IdeaPreview";
 import firebase from "../libs/firebase";
+import FormatNumber from "../utils/formatNumber";
 
 const ExplorePage = () => {
   const [ideas, setIdeas] = useState([]);
-
+  const [noIdea, setNoIdea] = useState(false);
   useEffect(() => {
     const unsubscribe = firebase
       .firestore()
@@ -14,20 +15,38 @@ const ExplorePage = () => {
       .where("status", "==", "approved")
       .orderBy("createdAt", "desc")
       .onSnapshot((docSnapshot) => {
-        let tempIdeas = [];
-        docSnapshot.forEach((snapshot) => {
-          tempIdeas.push({ id: snapshot.id, ...snapshot.data() });
-        });
-        tempIdeas.sort();
-        setIdeas(tempIdeas);
+        if (docSnapshot.size < 1) {
+          setNoIdea(true);
+        } else {
+          if (noIdea) setNoIdea(false);
+          let tempIdeas = [];
+          docSnapshot.forEach((snapshot) => {
+            tempIdeas.push({ id: snapshot.id, ...snapshot.data() });
+          });
+          tempIdeas.sort();
+          setIdeas(tempIdeas);
+        }
       });
     return () => {
       unsubscribe();
     };
   }, []);
 
-  if (ideas.length < 1) {
+  if (!noIdea && ideas.length < 1) {
     return <FullScreenSpinner />;
+  }
+
+  if (noIdea) {
+    return (
+      <Flex
+        alignItems="center"
+        justifyContent="center"
+        width="100%"
+        height="100%"
+      >
+        <Heading>No idea found..</Heading>
+      </Flex>
+    );
   }
 
   return (
@@ -47,9 +66,14 @@ const ExplorePage = () => {
               title={idea.title}
               text={idea.desc}
               avatar={idea.authorPhotoUrl ? idea.authorPhotoUrl : ""}
-              rating={idea.counter !== 0 ? idea.like / idea.counter : "0"}
+              rating={
+                idea.counter !== 0
+                  ? FormatNumber((idea.like / idea.counter) * 100)
+                  : "0"
+              }
               id={idea.id}
               counter={idea.counter}
+              category={idea.category}
             />
           );
         })}

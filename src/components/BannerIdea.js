@@ -1,5 +1,7 @@
-import { StarIcon } from "@chakra-ui/icons";
+import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import { Flex, Text, Heading, Avatar, Button, HStack } from "@chakra-ui/react";
+import { useAuth } from "../context/AuthContext";
+import FormatNumber from "../utils/formatNumber";
 
 const BannerIdea = ({
   idea,
@@ -8,13 +10,15 @@ const BannerIdea = ({
   setFeeling,
   isInteractedBefore,
 }) => {
+  const { user } = useAuth();
   return (
     <Flex
       w="100%"
       h={isBanner ? "400px" : "fill"}
-      bgColor="gray.200"
+      bgColor="gray.50"
+      boxShadow="base"
       borderRadius="12px"
-      _hover={isBanner && { bg: "gray.300" }}
+      _hover={isBanner && { bg: "gray.100" }}
       cursor={isBanner && "pointer"}
       position="relative"
     >
@@ -29,9 +33,9 @@ const BannerIdea = ({
             }}
             colorScheme={feeling === 0 || feeling === 1 ? "blue" : "gray"}
             variant="solid"
-            disabled={feeling === -1}
+            disabled={!user || feeling === -1}
           >
-            Like
+            <TriangleUpIcon />
           </Button>
           <Button
             onClick={() => {
@@ -42,9 +46,9 @@ const BannerIdea = ({
             }}
             colorScheme={feeling === 0 || feeling === -1 ? "red" : "gray"}
             variant="solid"
-            disabled={feeling === 1}
+            disabled={!user || feeling === 1}
           >
-            Disslike
+            <TriangleDownIcon />
           </Button>
         </HStack>
       )}
@@ -61,10 +65,19 @@ const BannerIdea = ({
             src={idea.authorPhotoUrl}
             mb="16px"
           />
-          <Text>{idea.authorName}</Text>
-          <Flex direction="row" alignItems="center">
-            <Text>{idea.counter === 0 ? "0" : idea.like / idea.counter}</Text>
-            <StarIcon w={4} h={4} ml="2px" />
+          <Text fontWeight="600" color="gray.700">
+            {idea.authorName}
+          </Text>
+          <Flex direction="row" alignItems="center" textAlign="center">
+            <Text
+              fontSize={idea.counter === 0 ? "14px" : "18px"}
+              fontWeight="500"
+              color={idea.counter === 0 ? "gray.500" : "gray.600"}
+            >
+              {idea.counter === 0
+                ? "No votes yet 😢"
+                : "" + FormatNumber((idea.like / idea.counter) * 100) + "%"}
+            </Text>
           </Flex>
         </Flex>
         <Flex direction="column" ml="32px" flex="6">
@@ -74,11 +87,11 @@ const BannerIdea = ({
           <Text fontSize="lg">{idea.desc}</Text>
         </Flex>
         <Text
-          fontWeight="500"
-          color="#242424"
           position="absolute"
           top="2%"
           right="2%"
+          fontWeight="500"
+          color="gray.500"
         >
           {!isBanner && idea.createdAt}
         </Text>

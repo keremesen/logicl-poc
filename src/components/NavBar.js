@@ -37,10 +37,10 @@ const NavBar = () => {
         </Button>
 
         <Stack direction="row" spacing="16px" align="center">
-          <Link to={auth.user ? "/share" : "/auth"}>
+          <Link to="/share">
             <AddIcon boxSize={6} />
           </Link>
-          <Link to={auth.user ? "/profile" : "/auth"}>
+          <Link to="/profile">
             <Avatar
               boxSize={8}
               bgColor="#000"

@@ -24,25 +24,15 @@ function App() {
           style={{ minHeight: `calc(100vh - 60px)` }}
         >
           <Switch>
-            <Route path="/" exact>
-              <Main />
-            </Route>
+            <Route path="/" exact component={Main} />
 
-            <Route path="/explore">
-              <ExplorePage />
-            </Route>
+            <Route path="/explore" component={ExplorePage} />
 
-            <Route path="/share">
-              <ShareIdea />
-            </Route>
+            <Route path="/share" component={ShareIdea} />
 
-            <Route path="/auth">
-              <Auth />
-            </Route>
+            <Route path="/auth" component={Auth} />
 
-            <Route path="/profile">
-              <Profile />
-            </Route>
+            <Route path="/profile" component={Profile} />
 
             <Route path="/i/:ideaId" component={IdeaDetail} />
           </Switch>

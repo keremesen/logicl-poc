@@ -15,14 +15,18 @@ export const useAuth = () => {
 
 function useProvideAuth() {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleUser = async (rawUser) => {
+    setLoading(true);
     if (rawUser) {
       const user = await formatUser(rawUser);
       setUser(user);
+      setLoading(false);
       return user;
     } else {
       setUser(false);
+      setLoading(false);
       return false;
     }
   };
@@ -67,6 +71,7 @@ function useProvideAuth() {
     user,
     signinWithGitHub,
     signout,
+    loading,
   };
 }
 

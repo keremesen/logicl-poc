@@ -1,3 +1,4 @@
+import { TriangleDownIcon } from "@chakra-ui/icons";
 import {
   Flex,
   FormControl,
@@ -5,21 +6,55 @@ import {
   Heading,
   Input,
   Textarea,
-  Radio,
-  RadioGroup,
   Button,
+  Select,
 } from "@chakra-ui/react";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import FullScreenSpinner from "../components/FullScreenSpinner";
 import { useAuth } from "../context/AuthContext";
-import firebase from "../libs/firebase";
+import firebase, { db } from "../libs/firebase";
+import DatePicker from "../utils/datePicker";
 
-const ShareIdea = () => {
+const ShareIdea = (props) => {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [category, setCategory] = useState("");
 
-  const user = useAuth().user;
+  const [categoryList, setCategoryList] = useState([]);
+  const [localLoading, setLocalLoading] = useState(true);
+  const { user, loading } = useAuth();
+
+  const isMounted = useRef(null);
+
+  useEffect(() => {
+    // executed when component mounted
+    isMounted.current = true;
+    return () => {
+      // executed when unmount
+      isMounted.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!loading && user && isMounted) {
+      db.collection("categories")
+        .get()
+        .then((collection) => {
+          let tempCategories = [];
+          collection.forEach((categoryDoc) => {
+            tempCategories.push({ id: categoryDoc.id, ...categoryDoc.data() });
+          });
+          setCategoryList(tempCategories);
+          setLocalLoading(false);
+        });
+    }
+  }, [loading, user]);
+
+  if (!loading && !user) {
+    props.history.push("/auth");
+  }
+
   return (
     <Flex
       flexDirection="column"
@@ -29,6 +64,7 @@ const ShareIdea = () => {
       my="auto"
       borderRadius="15px"
     >
+      {localLoading || loading ? <FullScreenSpinner /> : <></>}
       <Heading>Add Idea</Heading>
       <FormControl isRequired my={5}>
         <FormLabel>Title</FormLabel>
@@ -46,15 +82,25 @@ const ShareIdea = () => {
         />
 
         <FormLabel mt={5}>Category</FormLabel>
-        <RadioGroup onChange={setCategory} value={category}>
-          <Radio value="Web">Web</Radio>
-          <Radio ml={4} value="Mobile">
-            Mobile
-          </Radio>
-          <Radio ml={4} value="Design">
-            Design
-          </Radio>
-        </RadioGroup>
+        <Select
+          onChange={(e) => {
+            const tempSelectValue = e.target.value;
+            const tempCategory = categoryList.find(
+              (e) => e.id === tempSelectValue
+            );
+            setCategory(tempCategory);
+          }}
+          icon={<TriangleDownIcon />}
+          placeholder="Category"
+        >
+          {categoryList.map((cat, index) => {
+            return (
+              <option key={index} value={cat.id}>
+                {cat.displayText}
+              </option>
+            );
+          })}
+        </Select>
       </FormControl>
 
       <Button
@@ -64,14 +110,9 @@ const ShareIdea = () => {
         colorScheme="teal"
         padding={6}
         onClick={async () => {
-          let day = new Date().getDate();
-          let month = new Date().getMonth();
-          let year = new Date().getFullYear();
-          let hour = new Date().getHours();
-          let minute = new Date().getMinutes();
-          let second = new Date().getSeconds();
+          setLocalLoading(true);
 
-          let time = `${day}-${month}-${year} ${hour}:${minute}:${second}`;
+          let time = DatePicker();
 
           const ideaData = {
             authorId: user.uid,
@@ -96,9 +137,10 @@ const ShareIdea = () => {
             .collection("users")
             .doc(user.uid)
             .update({
-              sharedIdes: firebase.firestore.FieldValue.arrayUnion(ideaDoc),
+              sharedIdeas: firebase.firestore.FieldValue.arrayUnion(ideaDoc),
             })
             .then(() => {
+              setLocalLoading(false);
               window.location = "/explore";
             })
             .catch((err) => console.log(err));
