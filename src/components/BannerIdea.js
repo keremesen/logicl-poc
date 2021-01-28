@@ -78,7 +78,7 @@ const BannerIdea = ({
             >
               {idea.counter === 0
                 ? "No votes yet 😢"
-                : "" + FormatNumber((idea.like / idea.counter) * 100) + "%"}
+                : "" + FormatNumber((idea.upVote / idea.counter) * 100) + "%"}
             </Text>
           </Flex>
         </Flex>

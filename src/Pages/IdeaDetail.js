@@ -13,6 +13,7 @@ import BannerIdea from "../components/BannerIdea";
 import firebase from "../libs/firebase";
 import { useAuth } from "../context/AuthContext";
 import Comment from "../components/Comment";
+import DatePicker from "../utils/datePicker";
 
 const IdeaDetail = ({ match, history }) => {
   const [idea, setIdea] = useState(null);
@@ -21,56 +22,52 @@ const IdeaDetail = ({ match, history }) => {
   const [isInteractedBefore, setIsInteractedBefore] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const [feelingsPlural, setFeelingsPlural] = useState([]);
-  const [commentsPlural, setCommentsPlural] = useState([]);
+  const [interactions, setInteractions] = useState([]);
+
+  const [inProgress, setInProgress] = useState(false);
 
   const user = useAuth().user;
   const toast = useToast();
   const ideaId = match.params.ideaId;
 
+  const GetIdeaData = async () => {};
+
   useEffect(() => {
+    setLoading(true);
     db.collection("ideas")
       .doc(ideaId)
       .get()
-      .then((snapshot) => {
-        setIdea(snapshot.data());
-        const feelingsId = snapshot.data().feelingsId;
-        const commentsId = snapshot.data().commentsId;
-
+      .then((res) => {
+        const ideaTemp = res.data();
+        setIdea(ideaTemp);
         if (
-          feelingsId !== "" &&
-          feelingsId !== null &&
-          feelingsId !== undefined &&
-          commentsId !== "" &&
-          commentsId !== null &&
-          commentsId !== undefined
+          ideaTemp.interactionsId !== undefined &&
+          ideaTemp.interactionsId !== null &&
+          ideaTemp.interactionsId !== ""
         ) {
-          db.collection("feelings")
-            .doc(feelingsId)
+          const interactionsDocId = ideaTemp.interactionsId;
+          db.collection("interactions")
+            .doc(interactionsDocId)
             .get()
-            .then((response) => {
-              setFeelingsPlural(response.data().feelings);
-              const responseFeelings = response.data().feelings;
-              if (user) {
-                if (responseFeelings.length > 0) {
-                  responseFeelings.map((feeling) => {
-                    if (feeling.authorId === user.uid) {
-                      setFeeling(feeling.feeling);
-                      setIsInteractedBefore(true);
-                    }
-                    return null;
-                  });
-                }
-              }
+            .then((res) => {
+              const interactionsTemp = res.data().interactions;
+              setInteractions(interactionsTemp);
             });
-          db.collection("comments")
-            .doc(commentsId)
-            .get()
-            .then((response) => setCommentsPlural(response.data().comments));
         }
       });
+
     setLoading(false);
-  }, [ideaId, user]);
+  }, []);
+
+  useEffect(() => {
+    if (idea !== null && interactions.length > 0) {
+      const ahmet = interactions.find((e) => e.authorId === user.uid);
+      if (ahmet !== "" && ahmet !== null) {
+        setIsInteractedBefore(true);
+        setFeeling(ahmet.feeling);
+      }
+    }
+  }, [idea, interactions, user]);
 
   if (loading) {
     return <FullScreenSpinner />;
@@ -78,6 +75,10 @@ const IdeaDetail = ({ match, history }) => {
 
   if (idea === null) {
     return <FullScreenSpinner />;
+  }
+
+  if (!loading && idea === null) {
+    return <Heading>Bad path.</Heading>;
   }
 
   return (
@@ -140,18 +141,183 @@ const IdeaDetail = ({ match, history }) => {
         <Button
           mt={2}
           colorScheme={feeling === 1 ? "blue" : "red"}
-          isDisabled={comment.length > 362}
-          onClick={() => {
+          isDisabled={comment.length > 362 || inProgress}
+          onClick={async () => {
+            setInProgress(true);
             if (comment.length > 362) return;
-            
             setLoading(true);
-            //feeling obj
-            const tempFeeling = {
+
+            //interaction obj
+            const tempInteraction = {
               authorId: user.uid,
+              authorName: user.name,
+              authorPhotoUrl: user.photoUrl,
+              comment: comment,
+              createdAt: DatePicker(),
               feeling: feeling,
             };
-            const feelingArray = [tempFeeling];
 
+            const tempInteractionArray = [tempInteraction];
+
+            if (
+              idea.interactionsId === "" ||
+              idea.interactionsId === undefined ||
+              idea.interactionsId === null
+            ) {
+              const interactionsDocSnapshot = await db
+                .collection("interactions")
+                .add({
+                  interactions: tempInteractionArray,
+                });
+              const interactionsDocId = interactionsDocSnapshot.id;
+
+              if (feeling === 1) {
+                db.collection("ideas")
+                  .doc(ideaId)
+                  .update({
+                    interactionsId: interactionsDocId,
+                    counter: firebase.firestore.FieldValue.increment(1),
+                    upVote: firebase.firestore.FieldValue.increment(1),
+                  })
+                  .then((res) => {
+                    setIsInteractedBefore(true);
+                    let tempInteractions = interactions;
+                    tempInteractions.push(tempInteraction);
+                    setInteractions(tempInteractions);
+
+                    toast({
+                      title: "Comment sent succesfully.",
+                      description: "Thanks for your feedback.",
+                      status: "success",
+                      duration: 5000,
+                      isClosable: true,
+                    });
+                  });
+              } else if (feeling === -1) {
+                db.collection("ideas")
+                  .doc(ideaId)
+                  .update({
+                    interactionsId: interactionsDocId,
+                    counter: firebase.firestore.FieldValue.increment(1),
+                    downVote: firebase.firestore.FieldValue.increment(1),
+                  })
+                  .then((res) => {
+                    setIsInteractedBefore(true);
+                    setInteractions([tempInteraction, ...interactions]);
+                    toast({
+                      title: "Comment sent succesfully.",
+                      description: "Thanks for your feedback.",
+                      status: "success",
+                      duration: 5000,
+                      isClosable: true,
+                    });
+                  });
+              }
+            } else {
+              const interactionsDocId = idea.interactionsId;
+              await db
+                .collection("interactions")
+                .doc(interactionsDocId)
+                .update({
+                  interactions: firebase.firestore.FieldValue.arrayUnion(
+                    tempInteraction
+                  ),
+                });
+
+              if (feeling === 1) {
+                await db
+                  .collection("ideas")
+                  .doc(ideaId)
+                  .update({
+                    counter: firebase.firestore.FieldValue.increment(1),
+                    upVote: firebase.firestore.FieldValue.increment(1),
+                  });
+              } else if (feeling === -1) {
+                await db
+                  .collection("ideas")
+                  .doc(ideaId)
+                  .update({
+                    counter: firebase.firestore.FieldValue.increment(1),
+                    downVote: firebase.firestore.FieldValue.increment(1),
+                  });
+              } else {
+                //feeling === 0 ?
+              }
+
+              setIsInteractedBefore(true);
+              setInteractions([tempInteraction, ...interactions]);
+              toast({
+                title: "Comment sent succesfully.",
+                description: "Thanks for your feedback.",
+                status: "success",
+                duration: 5000,
+                isClosable: true,
+              });
+            }
+            setLoading(false);
+            setInProgress(false);
+            history.push("/explore");
+          }}
+        >
+          Give Feedback.
+        </Button>
+      </Flex>
+      <Flex
+        bgColor="gray.50"
+        width="100%"
+        padding={4}
+        mt={6}
+        boxShadow="base"
+        flexDirection="column"
+      >
+        <Heading>Interactions</Heading>
+        <Text>{interactions.length} interactions</Text>
+        <Flex flexDirection="column" alignItems="flex-start">
+          {interactions.length > 0 ? (
+            interactions.map((interaction) => {
+              if(interaction.comment === ''){
+                return null;
+              }
+              return (
+                <Comment
+                  key={interaction.authorId}
+                  feeling={interaction.feeling}
+                  comment={interaction}
+                />
+              );
+            })
+          ) : (<></>
+          )}
+        </Flex>
+      </Flex>
+    </Flex>
+  );
+};
+
+export default IdeaDetail;
+
+/**
+ * <Flex width="100%" backgroundColor="tomato" p={8}>
+        <Avatar
+          boxSize={12}
+          bgColor="#000"
+          src={idea.authorPhotoUrl || ""}
+        />
+        <Flex direction="column" align="center" mx={4}>
+          <Heading size="xl">
+            {idea.title}
+          </Heading>
+          <Text fontSize="lg">{idea.desc}</Text>
+        </Flex>
+        <Flex mr="10px" ml="130px" backgroundColor="tomato">
+          <Text mr="10px">{idea.like}</Text>
+          <StarIcon w={6} h={6} />
+        </Flex>
+      </Flex>
+ */
+
+/**
+  * 
             //first time feeling start
             if (
               idea.feelingsId === "" ||
@@ -209,27 +375,6 @@ const IdeaDetail = ({ match, history }) => {
                 });
             }
 
-            //date
-            let day = new Date().getDate();
-            let month = new Date().getMonth();
-            let year = new Date().getFullYear();
-            let hour = new Date().getHours();
-            let minute = new Date().getMinutes();
-            let second = new Date().getSeconds();
-
-            let time = `${day}-${month}-${year} ${hour}:${minute}:${second}`;
-
-            //comment obj
-            const tempComment = {
-              authorId: user.uid,
-              authorName: user.name,
-              authorPhotoUrl: user.photoUrl,
-              comment: comment,
-              createdAt: time,
-            };
-
-            const tempCommentArray = [tempComment];
-
             //first time comment start
             if (
               idea.commentsId === "" ||
@@ -275,61 +420,4 @@ const IdeaDetail = ({ match, history }) => {
                   });
                 });
             }
-            //first time comment end
-            setLoading(false);
-          }}
-        >
-          Comment
-        </Button>
-      </Flex>
-      <Flex
-        bgColor="gray.50"
-        width="100%"
-        padding={4}
-        mt={6}
-        boxShadow="base"
-        flexDirection="column"
-      >
-        <Heading>Comments</Heading>
-        <Flex flexDirection="column">
-          {commentsPlural.map((comment) => {
-            const commenterId = comment.authorId;
-            const feeling = feelingsPlural.find(
-              (e) => e.authorId === commenterId
-            );
-
-            return (
-              <Comment
-                key={comment.authorId}
-                feeling={feeling}
-                comment={comment}
-              />
-            );
-          })}
-        </Flex>
-      </Flex>
-    </Flex>
-  );
-};
-
-export default IdeaDetail;
-
-/**
- * <Flex width="100%" backgroundColor="tomato" p={8}>
-        <Avatar
-          boxSize={12}
-          bgColor="#000"
-          src={idea.authorPhotoUrl || ""}
-        />
-        <Flex direction="column" align="center" mx={4}>
-          <Heading size="xl">
-            {idea.title}
-          </Heading>
-          <Text fontSize="lg">{idea.desc}</Text>
-        </Flex>
-        <Flex mr="10px" ml="130px" backgroundColor="tomato">
-          <Text mr="10px">{idea.like}</Text>
-          <StarIcon w={6} h={6} />
-        </Flex>
-      </Flex>
- */
+  */

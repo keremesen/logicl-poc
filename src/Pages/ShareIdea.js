@@ -8,6 +8,7 @@ import {
   Textarea,
   Button,
   Select,
+  useToast,
 } from "@chakra-ui/react";
 
 import React, { useState, useEffect, useRef } from "react";
@@ -24,6 +25,7 @@ const ShareIdea = (props) => {
   const [categoryList, setCategoryList] = useState([]);
   const [localLoading, setLocalLoading] = useState(true);
   const { user, loading } = useAuth();
+  const toast = useToast();
 
   const isMounted = useRef(null);
 
@@ -121,11 +123,11 @@ const ShareIdea = (props) => {
             title,
             desc,
             createdAt: time,
-            like: 0,
-            disslike: 0,
+            upVote: 0,
+            downVote: 0,
             counter: 0,
             category,
-            commentsId: "",
+            interactionsId: "",
             status: "approved",
           };
           const ideaDoc = await firebase
@@ -141,7 +143,14 @@ const ShareIdea = (props) => {
             })
             .then(() => {
               setLocalLoading(false);
-              window.location = "/explore";
+              props.history.push("/explore");
+              toast({
+                title: "Is it logicl?",
+                description: "Idea shared succesfully.",
+                status: "success",
+                duration: 5000,
+                isClosable: true,
+              });
             })
             .catch((err) => console.log(err));
         }}

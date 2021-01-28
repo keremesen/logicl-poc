@@ -1,38 +1,70 @@
-import { Flex, Heading } from "@chakra-ui/react";
+import { Button, Flex, Heading, Text } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import FullScreenSpinner from "../components/FullScreenSpinner";
 import IdeaPreview from "../components/IdeaPreview";
-import firebase from "../libs/firebase";
+import firebase, { db } from "../libs/firebase";
 import FormatNumber from "../utils/formatNumber";
 
 const ExplorePage = () => {
   const [ideas, setIdeas] = useState([]);
   const [noIdea, setNoIdea] = useState(false);
+  const [noMoreIdea, setNoMoreIdea] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const fetchMoreIdeas = (lastIdea) => {
+    setLoading(true);
+    db.collection("ideas")
+      .where("status", "==", "approved")
+      .orderBy("createdAt", "desc")
+      .startAfter(lastIdea.createdAt)
+      .limit(10)
+      .get()
+      .then((res) => {
+        if (res.size < 10) {
+          console.log(res.size);
+          setNoMoreIdea(true);
+        } else {
+          let tempIdeas = ideas;
+          res.forEach((snapshot) => {
+            tempIdeas.push({ id: snapshot.id, ...snapshot.data() });
+          });
+          setIdeas(tempIdeas);
+        }
+        setLoading(false);
+      });
+  };
+
   useEffect(() => {
-    const unsubscribe = firebase
+    setLoading(true);
+    firebase
       .firestore()
       .collection("ideas")
       .where("status", "==", "approved")
       .orderBy("createdAt", "desc")
-      .onSnapshot((docSnapshot) => {
-        if (docSnapshot.size < 1) {
+      .limit(10)
+      .get()
+      .then((res) => {
+        if (res.size < 1) {
           setNoIdea(true);
         } else {
           if (noIdea) setNoIdea(false);
           let tempIdeas = [];
-          docSnapshot.forEach((snapshot) => {
+          res.forEach((snapshot) => {
             tempIdeas.push({ id: snapshot.id, ...snapshot.data() });
           });
           tempIdeas.sort();
           setIdeas(tempIdeas);
         }
+        if (res.size < 10) setNoMoreIdea(true);
+        setLoading(false);
       });
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+  }, [noIdea]);
 
-  if (!noIdea && ideas.length < 1) {
+  if (noIdea && ideas.length < 1) {
+    return <FullScreenSpinner />;
+  }
+
+  if (loading) {
     return <FullScreenSpinner />;
   }
 
@@ -68,7 +100,7 @@ const ExplorePage = () => {
               avatar={idea.authorPhotoUrl ? idea.authorPhotoUrl : ""}
               rating={
                 idea.counter !== 0
-                  ? FormatNumber((idea.like / idea.counter) * 100)
+                  ? FormatNumber((idea.upVote / idea.counter) * 100)
                   : "0"
               }
               id={idea.id}
@@ -77,6 +109,19 @@ const ExplorePage = () => {
             />
           );
         })}
+        <Flex width="100%" alignItems="center" justifyContent="center">
+          {!noMoreIdea ? (
+            <Button
+              onClick={() => {
+                fetchMoreIdeas(ideas[ideas.length - 1]);
+              }}
+            >
+              Load More Idea
+            </Button>
+          ) : (
+            <Text>No more data</Text>
+          )}
+        </Flex>
       </Flex>
     </Flex>
   );

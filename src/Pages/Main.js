@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Flex } from "@chakra-ui/react";
+import { Flex, Heading } from "@chakra-ui/react";
 import IdeaGroup from "../components/IdeaGroup";
 import BannerIdea from "../components/BannerIdea";
 import { db } from "../libs/firebase";
@@ -25,21 +25,23 @@ function Main() {
           .doc("todays-hits")
           .get()
           .then((res) => {
-            const selectionName = res.data().displayText;
-            const ideaIds = res.data().ideas;
-            ideaIds.map((ideaId) => {
-              db.collection("ideas")
-                .doc(ideaId)
-                .get()
-                .then((res) => {
-                  const idea = { id: res.id, ...res.data() };
-                  setTodaysHit({
-                    displayText: selectionName,
-                    hits: [idea, ...todaysHit.hits],
+            if (res.exists) {
+              const selectionName = res.data().displayText;
+              const ideaIds = res.data().ideas;
+              ideaIds.map((ideaId) => {
+                db.collection("ideas")
+                  .doc(ideaId)
+                  .get()
+                  .then((res) => {
+                    const idea = { id: res.id, ...res.data() };
+                    setTodaysHit({
+                      displayText: selectionName,
+                      hits: [idea, ...todaysHit.hits],
+                    });
                   });
-                  setLoading(false);
-                });
-            });
+              });
+            }
+            setLoading(false);
           });
       });
   }, []);
@@ -51,9 +53,13 @@ function Main() {
   return (
     <>
       <Flex w="1080px" h="100%" bgColor="#fff" p="24px" direction="column">
-        <BannerIdea idea={banner} />
+        {banner !== null && <BannerIdea idea={banner} />}
         <Flex flexDirection="column" mx={4}>
-          <IdeaGroup list={todaysHit.hits} title={todaysHit.displayText} />
+          {todaysHit !== null ? (
+            <IdeaGroup list={todaysHit.hits} title={todaysHit.displayText} />
+          ) : (
+            <Heading size='6xl'>Nothing found.</Heading>
+          )}
         </Flex>
       </Flex>
     </>

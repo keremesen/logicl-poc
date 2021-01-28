@@ -13,7 +13,6 @@ const IdeaPreview = ({
   category,
 }) => {
   return (
-    <Link to={`/i/${id}`}>
       <Flex
         w="960px"
         backgroundColor="gray.50"
@@ -24,6 +23,8 @@ const IdeaPreview = ({
         _hover={{ background: "gray.100" }}
         justifyContent="space-between"
         padding={4}
+        as={Link}
+        to={`/i/${id}`}
       >
         <Flex flex="6">
           <Avatar boxSize={8} bgColor="#000" src={avatar} mr={4} />
@@ -35,8 +36,8 @@ const IdeaPreview = ({
                 size="md"
                 variant="solid"
                 colorScheme={
-                  category.color !== null ||
-                  category.color !== undefined ||
+                  category.color !== null &&
+                  category.color !== undefined &&
                   category.color !== ""
                     ? category.color
                     : "teal"
@@ -64,7 +65,6 @@ const IdeaPreview = ({
           </Text>
         </Flex>
       </Flex>
-    </Link>
   );
 };
 
