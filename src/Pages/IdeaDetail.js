@@ -158,125 +158,61 @@ const IdeaDetail = ({ match, history }) => {
               feeling: feeling,
             };
 
-            const tempInteractionArray = [tempInteraction];
-
-            if (
-              idea.interactionsId === "" ||
-              idea.interactionsId === undefined ||
-              idea.interactionsId === null
-            ) {
-              db.collection("interactions")
-                .add({
-                  interactions: tempInteractionArray,
-                })
-                .then((res) => {
-                  const interactionsDocId = res.id;
-                  if (feeling === 1) {
-                    db.collection("ideas")
-                      .doc(ideaId)
-                      .update({
-                        interactionsId: interactionsDocId,
-                        counter: firebase.firestore.FieldValue.increment(1),
-                        upVote: firebase.firestore.FieldValue.increment(1),
-                      })
-                      .then((res) => {
-                        setIsInteractedBefore(true);
-                        let tempInteractions = interactions;
-                        tempInteractions.push(tempInteraction);
-                        setInteractions(tempInteractions);
-
-                        toast({
-                          title: "Comment sent succesfully.",
-                          description: "Thanks for your feedback.",
-                          status: "success",
-                          duration: 5000,
-                          isClosable: true,
-                        });
-                        setLoading(false);
-                        setInProgress(false);
-                        history.push("/explore");
+            const interactionsDocId = idea.interactionsId;
+            db.collection("interactions")
+              .doc(interactionsDocId)
+              .update({
+                interactions: firebase.firestore.FieldValue.arrayUnion(
+                  tempInteraction
+                ),
+              })
+              .then((res) => {
+                if (feeling === 1) {
+                  db.collection("ideas")
+                    .doc(ideaId)
+                    .update({
+                      counter: firebase.firestore.FieldValue.increment(1),
+                      upVote: firebase.firestore.FieldValue.increment(1),
+                    })
+                    .then((res) => {
+                      setIsInteractedBefore(true);
+                      setInteractions([tempInteraction, ...interactions]);
+                      toast({
+                        title: "Comment sent succesfully.",
+                        description: "Thanks for your feedback.",
+                        status: "success",
+                        duration: 5000,
+                        isClosable: true,
                       });
-                  } else if (feeling === -1) {
-                    db.collection("ideas")
-                      .doc(ideaId)
-                      .update({
-                        interactionsId: interactionsDocId,
-                        counter: firebase.firestore.FieldValue.increment(1),
-                        downVote: firebase.firestore.FieldValue.increment(1),
-                      })
-                      .then((res) => {
-                        setIsInteractedBefore(true);
-                        setInteractions([tempInteraction, ...interactions]);
-                        toast({
-                          title: "Comment sent succesfully.",
-                          description: "Thanks for your feedback.",
-                          status: "success",
-                          duration: 5000,
-                          isClosable: true,
-                        });
-                        setLoading(false);
-                        setInProgress(false);
-                        history.push("/explore");
+                      setLoading(false);
+                      setInProgress(false);
+                      history.push("/explore");
+                    });
+                } else if (feeling === -1) {
+                  db.collection("ideas")
+                    .doc(ideaId)
+                    .update({
+                      counter: firebase.firestore.FieldValue.increment(1),
+                      downVote: firebase.firestore.FieldValue.increment(1),
+                    })
+                    .then((res) => {
+                      setIsInteractedBefore(true);
+                      setInteractions([tempInteraction, ...interactions]);
+                      toast({
+                        title: "Comment sent succesfully.",
+                        description: "Thanks for your feedback.",
+                        status: "success",
+                        duration: 5000,
+                        isClosable: true,
                       });
-                  }
-                });
-            } else {
-              const interactionsDocId = idea.interactionsId;
-              db.collection("interactions")
-                .doc(interactionsDocId)
-                .update({
-                  interactions: firebase.firestore.FieldValue.arrayUnion(
-                    tempInteraction
-                  ),
-                })
-                .then((res) => {
-                  if (feeling === 1) {
-                    db.collection("ideas")
-                      .doc(ideaId)
-                      .update({
-                        counter: firebase.firestore.FieldValue.increment(1),
-                        upVote: firebase.firestore.FieldValue.increment(1),
-                      })
-                      .then((res) => {
-                        setIsInteractedBefore(true);
-                        setInteractions([tempInteraction, ...interactions]);
-                        toast({
-                          title: "Comment sent succesfully.",
-                          description: "Thanks for your feedback.",
-                          status: "success",
-                          duration: 5000,
-                          isClosable: true,
-                        });
-                        setLoading(false);
-                        setInProgress(false);
-                        history.push("/explore");
-                      });
-                  } else if (feeling === -1) {
-                    db.collection("ideas")
-                      .doc(ideaId)
-                      .update({
-                        counter: firebase.firestore.FieldValue.increment(1),
-                        downVote: firebase.firestore.FieldValue.increment(1),
-                      })
-                      .then((res) => {
-                        setIsInteractedBefore(true);
-                        setInteractions([tempInteraction, ...interactions]);
-                        toast({
-                          title: "Comment sent succesfully.",
-                          description: "Thanks for your feedback.",
-                          status: "success",
-                          duration: 5000,
-                          isClosable: true,
-                        });
-                        setLoading(false);
-                        setInProgress(false);
-                        history.push("/explore");
-                      });
-                  } else {
-                    //feeling === 0 ?
-                  }
-                });
-            }
+                      setLoading(false);
+                      setInProgress(false);
+                      history.push("/explore");
+                    });
+                } else {
+                  //feeling === 0 ?
+                }
+              });
           }}
         >
           Give Feedback.

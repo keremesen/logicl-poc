@@ -115,7 +115,9 @@ const ShareIdea = (props) => {
           setLocalLoading(true);
 
           let time = DatePicker();
-
+          const interactionsId = await (
+            await db.collection("interactions").add({ interactions: [] })
+          ).id;
           const ideaData = {
             authorId: user.uid,
             authorName: user.name,
@@ -127,7 +129,7 @@ const ShareIdea = (props) => {
             downVote: 0,
             counter: 0,
             category,
-            interactionsId: "",
+            interactionsId: interactionsId,
             status: "approved",
           };
           const ideaDoc = await firebase
