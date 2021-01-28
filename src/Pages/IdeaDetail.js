@@ -62,7 +62,8 @@ const IdeaDetail = ({ match, history }) => {
   useEffect(() => {
     if (idea !== null && interactions.length > 0) {
       const ahmet = interactions.find((e) => e.authorId === user.uid);
-      if (ahmet !== "" && ahmet !== null) {
+      console.log(ahmet);
+      if (ahmet !== "" && ahmet !== null && ahmet !== undefined) {
         setIsInteractedBefore(true);
         setFeeling(ahmet.feeling);
       }
