@@ -41,9 +41,6 @@ const Profile = (props) => {
         <Flex direction="column" m={8}>
           <Heading>{user.name}</Heading>
           <Heading>{user.email}</Heading>
-          <Button mx={4} colorScheme="gray" onClick={signout}>
-            Sign Out
-          </Button>
         </Flex>
       </Flex>
     </Flex>

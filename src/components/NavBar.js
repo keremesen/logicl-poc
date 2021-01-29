@@ -1,4 +1,16 @@
-import { Flex, Avatar, Heading, Stack, Button } from "@chakra-ui/react";
+import {
+  Flex,
+  Avatar,
+  Heading,
+  Stack,
+  Button,
+  MenuList,
+  MenuButton,
+  MenuGroup,
+  MenuItem,
+  MenuDivider,
+  Menu,
+} from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -8,12 +20,12 @@ const NavBar = () => {
   return (
     <Flex
       as="nav"
-      w="100vw"
+      w="100%"
       h="60px"
       bgColor="#FEEBC8"
       align="center"
       justifyContent="center"
-      zIndex='10'
+      zIndex="10"
     >
       <Flex
         bgColor="#FEEBC8"
@@ -40,13 +52,37 @@ const NavBar = () => {
           <Link to="/share">
             <AddIcon boxSize={6} />
           </Link>
-          <Link to="/profile">
-            <Avatar
-              boxSize={8}
-              bgColor="#000"
-              src={auth.user ? auth.user.photoUrl : ""}
-            />
-          </Link>
+          {auth.user ? (
+            <Menu>
+              <MenuButton as={Link} colorScheme="transparent">
+                <Avatar
+                  boxSize={8}
+                  bgColor="#000"
+                  src={auth.user ? auth.user.photoUrl : ""}
+                />
+              </MenuButton>
+              <MenuList>
+                <MenuGroup title="Profile">
+                  <Link to="/profile">
+                    <MenuItem>My Account</MenuItem>
+                  </Link>
+
+                  <MenuItem>My Ideas </MenuItem>
+                  <MenuItem onClick={auth.signout}>Sign Out</MenuItem>
+                </MenuGroup>
+                <MenuDivider />
+              </MenuList>
+            </Menu>
+          ) : (
+            <Link to="/profile">
+              {" "}
+              <Avatar
+                boxSize={8}
+                bgColor="#000"
+                src={auth.user ? auth.user.photoUrl : ""}
+              />
+            </Link>
+          )}
         </Stack>
       </Flex>
     </Flex>
