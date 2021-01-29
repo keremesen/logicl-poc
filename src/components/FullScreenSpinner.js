@@ -4,7 +4,7 @@ import React from "react";
 const FullScreenSpinner = () => {
   return (
     <Box
-      position="absolute"
+      position="fixed"
       top="0"
       left="0"
       width="100vw"

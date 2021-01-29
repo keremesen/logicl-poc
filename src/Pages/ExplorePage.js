@@ -1,4 +1,4 @@
-import { Button, Flex, Heading, Text } from "@chakra-ui/react";
+import { Button, Flex, Heading, Spinner, Text } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import FullScreenSpinner from "../components/FullScreenSpinner";
 import IdeaPreview from "../components/IdeaPreview";
@@ -21,7 +21,6 @@ const ExplorePage = () => {
       .get()
       .then((res) => {
         if (res.size < 10) {
-          console.log(res.size);
           setNoMoreIdea(true);
         } else {
           let tempIdeas = ideas;
@@ -60,13 +59,7 @@ const ExplorePage = () => {
       });
   }, [noIdea]);
 
-  if (noIdea && ideas.length < 1) {
-    return <FullScreenSpinner />;
-  }
-
-  if (loading) {
-    return <FullScreenSpinner />;
-  }
+  
 
   if (noIdea) {
     return (
@@ -91,37 +84,56 @@ const ExplorePage = () => {
         flexDirection="column"
         align="center"
       >
-        {ideas.map((idea, index) => {
-          return (
-            <IdeaPreview
-              key={index}
-              title={idea.title}
-              text={idea.desc}
-              avatar={idea.authorPhotoUrl ? idea.authorPhotoUrl : ""}
-              rating={
-                idea.counter !== 0
-                  ? FormatNumber((idea.upVote / idea.counter) * 100)
-                  : "0"
-              }
-              id={idea.id}
-              counter={idea.counter}
-              category={idea.category}
-            />
-          );
-        })}
-        <Flex width="100%" alignItems="center" justifyContent="center">
-          {!noMoreIdea ? (
-            <Button
-              onClick={() => {
-                fetchMoreIdeas(ideas[ideas.length - 1]);
-              }}
+        {loading ? (
+          <Spinner
+            boxSize={12}
+            size="md"
+            color="red.500"
+            pos="fixed"
+            top="40%"
+            left="50%"
+          />
+        ) : (
+          <>
+            {ideas.map((idea, index) => {
+              return (
+                <IdeaPreview
+                  key={index}
+                  title={idea.title}
+                  text={idea.desc}
+                  avatar={idea.authorPhotoUrl ? idea.authorPhotoUrl : ""}
+                  rating={
+                    idea.counter !== 0
+                      ? FormatNumber((idea.upVote / idea.counter) * 100)
+                      : "0"
+                  }
+                  id={idea.id}
+                  counter={idea.counter}
+                  category={idea.category}
+                />
+              );
+            })}
+            <Flex
+              width="100%"
+              alignItems="center"
+              justifyContent="center"
+              p={8}
+              mb={24}
             >
-              Load More Idea
-            </Button>
-          ) : (
-            <Text>No more data</Text>
-          )}
-        </Flex>
+              {!noMoreIdea ? (
+                <Button
+                  onClick={() => {
+                    fetchMoreIdeas(ideas[ideas.length - 1]);
+                  }}
+                >
+                  Load More Idea
+                </Button>
+              ) : (
+                <Text>No more data</Text>
+              )}
+            </Flex>
+          </>
+        )}
       </Flex>
     </Flex>
   );

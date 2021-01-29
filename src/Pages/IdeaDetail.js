@@ -5,6 +5,7 @@ import {
   Text,
   Textarea,
   useToast,
+  Spinner,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { db } from "../libs/firebase";
@@ -20,7 +21,10 @@ const IdeaDetail = ({ match, history }) => {
   const [feeling, setFeeling] = useState(0);
   const [comment, setComment] = useState("");
   const [isInteractedBefore, setIsInteractedBefore] = useState(false);
-  const [loading, setLoading] = useState(true);
+
+  const [ideaLoading, setIdeaLoading] = useState(true);
+  const [interactionLoading, setInteractionLoading] = useState(true);
+  const [process, setProcess] = useState(false);
 
   const [interactions, setInteractions] = useState([]);
 
@@ -30,14 +34,14 @@ const IdeaDetail = ({ match, history }) => {
   const toast = useToast();
   const ideaId = match.params.ideaId;
 
-  const GetIdeaData = async () => {};
-
   useEffect(() => {
-    setLoading(true);
+    setIdeaLoading(true);
+    setInteractionLoading(true);
     db.collection("ideas")
       .doc(ideaId)
       .get()
       .then((res) => {
+        setIdeaLoading(false);
         const ideaTemp = res.data();
         setIdea(ideaTemp);
         if (
@@ -52,17 +56,16 @@ const IdeaDetail = ({ match, history }) => {
             .then((res) => {
               const interactionsTemp = res.data().interactions;
               setInteractions(interactionsTemp);
+              setInteractionLoading(false);
             });
         }
       });
-
-    setLoading(false);
   }, []);
 
   useEffect(() => {
     if (idea !== null && interactions.length > 0) {
       const ahmet = interactions.find((e) => e.authorId === user.uid);
-      console.log(ahmet);
+
       if (ahmet !== "" && ahmet !== null && ahmet !== undefined) {
         setIsInteractedBefore(true);
         setFeeling(ahmet.feeling);
@@ -70,15 +73,7 @@ const IdeaDetail = ({ match, history }) => {
     }
   }, [idea, interactions, user]);
 
-  if (loading) {
-    return <FullScreenSpinner />;
-  }
-
-  if (idea === null) {
-    return <FullScreenSpinner />;
-  }
-
-  if (!loading && idea === null) {
+  if (!ideaLoading && idea === null) {
     return <Heading>Bad path.</Heading>;
   }
 
@@ -113,6 +108,8 @@ const IdeaDetail = ({ match, history }) => {
         feeling={feeling}
         setFeeling={!isInteractedBefore && setFeeling}
         isInteractedBefore={isInteractedBefore}
+        ideaLoading={ideaLoading}
+        interactionLoading={interactionLoading}
       />
       <Flex
         display={!isInteractedBefore && feeling !== 0 ? "flex" : "none"}
@@ -143,10 +140,12 @@ const IdeaDetail = ({ match, history }) => {
           mt={2}
           colorScheme={feeling === 1 ? "blue" : "red"}
           isDisabled={comment.length > 362 || inProgress}
+          isLoading={inProgress}
+          loadingText='Sending feedback.'
           onClick={async () => {
             setInProgress(true);
             if (comment.length > 362) return;
-            setLoading(true);
+            setProcess(true);
 
             //interaction obj
             const tempInteraction = {
@@ -184,9 +183,9 @@ const IdeaDetail = ({ match, history }) => {
                         duration: 5000,
                         isClosable: true,
                       });
-                      setLoading(false);
+                      setProcess(false);
                       setInProgress(false);
-                      history.push("/explore");
+                      history.push(`/i/${ideaId}`);
                     });
                 } else if (feeling === -1) {
                   db.collection("ideas")
@@ -205,9 +204,9 @@ const IdeaDetail = ({ match, history }) => {
                         duration: 5000,
                         isClosable: true,
                       });
-                      setLoading(false);
+                      setProcess(false);
                       setInProgress(false);
-                      history.push("/explore");
+                      history.push(`/i/${ideaId}`);
                     });
                 } else {
                   //feeling === 0 ?
@@ -226,26 +225,32 @@ const IdeaDetail = ({ match, history }) => {
         boxShadow="base"
         flexDirection="column"
       >
-        <Heading>Interactions</Heading>
-        <Text>{interactions.length} interactions</Text>
-        <Flex flexDirection="column" alignItems="flex-start">
-          {interactions.length > 0 ? (
-            interactions.map((interaction) => {
-              if (interaction.comment === "") {
-                return null;
-              }
-              return (
-                <Comment
-                  key={interaction.authorId}
-                  feeling={interaction.feeling}
-                  comment={interaction}
-                />
-              );
-            })
-          ) : (
-            <></>
-          )}
-        </Flex>
+        {ideaLoading || interactionLoading ? (
+          <Spinner boxSize={12} size="md" color="red.500" alignSelf='center' />
+        ) : (
+          <>
+            <Heading>Interactions</Heading>
+            <Text>{interactions.length} interactions</Text>
+            <Flex flexDirection="column" alignItems="flex-start">
+              {interactions.length > 0 ? (
+                interactions.map((interaction) => {
+                  if (interaction.comment === "") {
+                    return null;
+                  }
+                  return (
+                    <Comment
+                      key={interaction.authorId}
+                      feeling={interaction.feeling}
+                      comment={interaction}
+                    />
+                  );
+                })
+              ) : (
+                <></>
+              )}
+            </Flex>
+          </>
+        )}
       </Flex>
     </Flex>
   );
