@@ -1,6 +1,5 @@
 import { Button, Flex, Heading, Spinner, Text } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
-import FullScreenSpinner from "../components/FullScreenSpinner";
 import IdeaPreview from "../components/IdeaPreview";
 import firebase, { db } from "../libs/firebase";
 import FormatNumber from "../utils/formatNumber";
@@ -59,8 +58,6 @@ const ExplorePage = () => {
       });
   }, [noIdea]);
 
-  
-
   if (noIdea) {
     return (
       <Flex
@@ -86,12 +83,15 @@ const ExplorePage = () => {
       >
         {loading ? (
           <Spinner
-            boxSize={12}
-            size="md"
+          boxSize={24}
+            size="xl"
             color="red.500"
             pos="fixed"
             top="40%"
             left="50%"
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
           />
         ) : (
           <>

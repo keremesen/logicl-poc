@@ -13,7 +13,6 @@ import {
 } from "@chakra-ui/react";
 
 import React, { useState, useEffect, useRef } from "react";
-import FullScreenSpinner from "../components/FullScreenSpinner";
 import { useAuth } from "../context/AuthContext";
 import firebase, { db } from "../libs/firebase";
 import DatePicker from "../utils/datePicker";
@@ -69,7 +68,7 @@ const ShareIdea = (props) => {
       my="auto"
       borderRadius="15px"
       position="relative"
-      minH="400px"
+      minH="480px"
     >
       <Heading>Add Idea</Heading>
       {localLoading || loading ? (
@@ -80,6 +79,9 @@ const ShareIdea = (props) => {
           pos="absolute"
           top="40%"
           left="50%"
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
         />
       ) : (
         <>

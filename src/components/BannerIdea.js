@@ -25,8 +25,8 @@ const BannerIdea = ({
   return (
     <Flex
       w="100%"
-      h={isBanner ? "400px" : "fill"}
-      minH='300px'
+      h={isBanner ? "320px" : "fill"}
+      minH="300px"
       bgColor="gray.50"
       boxShadow="base"
       borderRadius="12px"
@@ -38,14 +38,32 @@ const BannerIdea = ({
     >
       {ideaLoading ? (
         <>
-          <Spinner boxSize={12} size="md" color="red.500" pos='absolute' top='40%' left='50%' />
+          <Spinner
+            boxSize={12}
+            size="md"
+            color="red.500"
+            pos="absolute"
+            top="40%"
+            left="50%"
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+          />
         </>
       ) : (
         <>
           {!isBanner && (
             <HStack position="absolute" bottom="2%" left="1%">
               {interactionLoading ? (
-                <Spinner boxSize={12} size="md" color="red.500" position='absolute' bottom="2%" left="10%" />
+                <Spinner
+                  boxSize={8}
+                  size="sm"
+                  color="red.500"
+                  thickness="4px"
+                  speed="0.65s"
+                  emptyColor="gray.200"
+                  mx={10}
+                />
               ) : (
                 <>
                   {" "}
@@ -101,7 +119,7 @@ const BannerIdea = ({
               <Text fontWeight="600" color="gray.700">
                 {idea.authorName}
               </Text>
-              <Flex direction="row" alignItems="center" textAlign="center">
+              <Flex direction="column" alignItems="center" textAlign="center">
                 <Text
                   fontSize={idea.counter === 0 ? "14px" : "18px"}
                   fontWeight="500"
@@ -113,6 +131,11 @@ const BannerIdea = ({
                       FormatNumber((idea.upVote / idea.counter) * 100) +
                       "%"}
                 </Text>
+                {idea.counter !== 0 && (
+                  <Text fontSize="14px" fontWeight="500">
+                    {idea.counter} people voted.
+                  </Text>
+                )}
               </Flex>
             </Flex>
             <Flex direction="column" ml="32px" flex="6">

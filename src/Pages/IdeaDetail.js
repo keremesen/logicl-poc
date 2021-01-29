@@ -9,7 +9,6 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { db } from "../libs/firebase";
-import FullScreenSpinner from "../components/FullScreenSpinner";
 import BannerIdea from "../components/BannerIdea";
 import firebase from "../libs/firebase";
 import { useAuth } from "../context/AuthContext";
@@ -60,7 +59,7 @@ const IdeaDetail = ({ match, history }) => {
             });
         }
       });
-  }, []);
+  }, [ideaId]);
 
   useEffect(() => {
     if (idea !== null && interactions.length > 0) {
@@ -140,8 +139,8 @@ const IdeaDetail = ({ match, history }) => {
           mt={2}
           colorScheme={feeling === 1 ? "blue" : "red"}
           isDisabled={comment.length > 362 || inProgress}
-          isLoading={inProgress}
-          loadingText='Sending feedback.'
+          isLoading={inProgress || process}
+          loadingText="Sending feedback."
           onClick={async () => {
             setInProgress(true);
             if (comment.length > 362) return;
@@ -226,7 +225,15 @@ const IdeaDetail = ({ match, history }) => {
         flexDirection="column"
       >
         {ideaLoading || interactionLoading ? (
-          <Spinner boxSize={12} size="md" color="red.500" alignSelf='center' />
+          <Spinner
+            boxSize={12}
+            size="md"
+            color="red.500"
+            alignSelf="center"
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+          />
         ) : (
           <>
             <Heading>Interactions</Heading>

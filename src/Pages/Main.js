@@ -39,6 +39,7 @@ function Main() {
                       hits: [idea, ...todaysHit.hits],
                     });
                   });
+                return null;
               });
             }
             setLoading(false);
@@ -55,10 +56,10 @@ function Main() {
       <Flex w="1080px" h="100%" bgColor="#fff" p="24px" direction="column">
         {banner !== null && <BannerIdea idea={banner} />}
         <Flex flexDirection="column" mx={4}>
-          {todaysHit !== null ? (
-            <IdeaGroup list={todaysHit.hits} title={todaysHit.displayText} />
+          {todaysHit !== null || todaysHit.hits.length < 1 ? (
+            <Heading my={4} mx='auto' size="lg">No selection lists found.</Heading>
           ) : (
-            <Heading size='6xl'>Nothing found.</Heading>
+            <IdeaGroup list={todaysHit.hits} title={todaysHit.displayText} />
           )}
         </Flex>
       </Flex>

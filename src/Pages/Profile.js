@@ -1,4 +1,4 @@
-import { Avatar, Button, Flex, Heading, Link } from "@chakra-ui/react";
+import { Avatar, Button, Flex, Heading } from "@chakra-ui/react";
 import React, { useEffect, useRef } from "react";
 import FullScreenSpinner from "../components/FullScreenSpinner";
 import { useAuth } from "../context/AuthContext";
