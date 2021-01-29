@@ -22,32 +22,32 @@ const Profile = (props) => {
     return <FullScreenSpinner />;
   }
 
-  if (!loading && user && isMounted) {
-    return (
-      <Flex
-        w="1080px"
-        h="100%"
-        minH="93vh"
-        background="#fff"
-        direction="column"
-        align="flex-start"
-      >
-        <Heading m={5}>Profile</Heading>
-        <Flex direction="row" m={6}>
-          <Avatar boxSize={48} bgColor="#000" src={user.photoUrl} />
-          <Flex direction="column" m={8}>
-            <Heading>{user.name}</Heading>
-            <Heading>{user.email}</Heading>
-            <Button mx={4} colorScheme="gray" onClick={signout}>
-              Sign Out
-            </Button>
-          </Flex>
+  if(loading){
+    return <FullScreenSpinner />
+  }
+
+  return (
+    <Flex
+      w="1080px"
+      h="100%"
+      minH="93vh"
+      background="#fff"
+      direction="column"
+      align="flex-start"
+    >
+      <Heading m={5}>Profile</Heading>
+      <Flex direction="row" m={6}>
+        <Avatar boxSize={48} bgColor="#000" src={user.photoUrl} />
+        <Flex direction="column" m={8}>
+          <Heading>{user.name}</Heading>
+          <Heading>{user.email}</Heading>
+          <Button mx={4} colorScheme="gray" onClick={signout}>
+            Sign Out
+          </Button>
         </Flex>
       </Flex>
-    );
-  } else {
-    return <FullScreenSpinner />;
-  }
+    </Flex>
+  );
 };
 
 export default Profile;

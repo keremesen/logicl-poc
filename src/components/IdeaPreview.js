@@ -34,14 +34,8 @@ const IdeaPreview = ({
               <Tag
                 mx={2}
                 size="md"
-                variant="solid"
-                colorScheme={
-                  category.color !== null &&
-                  category.color !== undefined &&
-                  category.color !== ""
-                    ? category.color
-                    : "teal"
-                }
+                bgColor={category.bgColor ? category.bgColor : ''}
+                color={category.color ? category.color : 'white'}
               >
                 {category.displayText || category}
               </Tag>
