@@ -16,7 +16,7 @@ function App() {
         <CSSReset />
         <NavBar />
         <Flex
-          w="100vw"
+          w="100%"
           direction="column"
           align="center"
           height="100%"
