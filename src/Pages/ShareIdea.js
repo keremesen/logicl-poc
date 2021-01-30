@@ -77,8 +77,11 @@ const ShareIdea = (props) => {
           size="xl"
           color="red.500"
           pos="absolute"
-          top="40%"
-          left="50%"
+          top="0"
+          left="0"
+          right="0"
+          bottom="0"
+          margin='auto'
           thickness="4px"
           speed="0.65s"
           emptyColor="gray.200"

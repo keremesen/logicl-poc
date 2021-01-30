@@ -14,7 +14,8 @@ export const useAuth = () => {
 };
 
 function useProvideAuth() {
-  const [user, setUser] = useState(null);
+  const localUserData = localStorage.getItem("logicl-user-local");
+  const [user, setUser] = useState(localUserData ? JSON.parse(localUserData) : null);
   const [loading, setLoading] = useState(false);
 
   const handleUser = async (rawUser) => {
@@ -23,8 +24,10 @@ function useProvideAuth() {
       const user = await formatUser(rawUser);
       setUser(user);
       setLoading(false);
+      localStorage.setItem("logicl-user-local", JSON.stringify(user));
       return user;
     } else {
+      localStorage.removeItem("logicl-user-local");
       setUser(false);
       setLoading(false);
       return false;
@@ -62,7 +65,7 @@ function useProvideAuth() {
   };
 
   useEffect(() => {
-    const unsubscribe = firebase.auth().onIdTokenChanged(handleUser);
+    const unsubscribe = firebase.auth().onAuthStateChanged(handleUser);
 
     return () => unsubscribe();
   }, []);
