@@ -49,21 +49,21 @@ const [email , setEmail] = useState(user.email)
       <Flex direction="row" m={6}>
         <Flex direction="column">
         <Avatar boxSize={48} bgColor="#000" src={user.photoUrl} />
-      
+        <Button bgColor="gray.200" mt="15px">Change Photo</Button>
         </Flex>
         
         <Flex direction="column" m={8} w="320px">
           
           <FormLabel mt="30px">NAME</FormLabel>
          <Input value={name} isReadOnly={read} onChange={(e)=> {setName(e.target.value)}} /> 
-         
-         <FormControl itemType="email" >
          <FormLabel>EMAIL</FormLabel>
+         <FormControl id="email" isRequired>
          <Input value={email} isReadOnly={read} onChange={(e)=> {setEmail(e.target.value)}}  type="email" /> 
          </FormControl>
          
-         {/* <Button bgColor="gray.200" mt="15px" onClick={()=> setRead(false)} isDisabled={!read} > Set Profile</Button>
-         {read ? ''  : <Button bgColor="green.300" mt={4} onClick={()=> setRead(true)}  >Save</Button>} */}
+         <Button bgColor="gray.200" mt="15px" onClick={()=> setRead(false)} isDisabled={!read} > Set Profile</Button>
+         
+         {read ? ''  : <Button bgColor="green.300" mt={4} onClick={()=> setRead(true)}  >Save</Button>}
          
          
         </Flex>

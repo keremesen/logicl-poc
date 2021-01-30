@@ -8,6 +8,7 @@ import { AuthProvider } from "./context/AuthContext";
 import ShareIdea from "./Pages/ShareIdea";
 import Profile from "./Pages/Profile";
 import IdeaDetail from "./Pages/IdeaDetail";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
 
             <Route path="/i/:ideaId" component={IdeaDetail} />
           </Switch>
+          <Footer/>
         </Flex>
       </AuthProvider>
     </Router>
