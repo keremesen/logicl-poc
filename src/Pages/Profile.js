@@ -6,12 +6,10 @@ import {
   FormLabel,
   Heading,
   Input,
-  VisuallyHidden,
 } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
 import FullScreenSpinner from "../components/FullScreenSpinner";
 import { useAuth } from "../context/AuthContext";
-import Auth from "./Auth";
 
 const Profile = (props) => {
   const { user, loading } = useAuth();
@@ -41,6 +39,7 @@ const Profile = (props) => {
 
   const setProfile = () => {
     setRead(false);
+    setisValid(false)
     setName("");
     setEmail("");
   };
@@ -82,7 +81,7 @@ const Profile = (props) => {
       <Flex direction="column" m={6} textAlign="center">
         <Flex direction="column" alignItems="center">
           <Avatar boxSize={64} bgColor="#000" src={user.photoUrl} />
-          <Button bgColor="gray.200" width="35%" mt="15px">
+          <Button bgColor="gray.200" width="35%" mt={6}>
             Change Photo
           </Button>
         </Flex>
@@ -125,10 +124,10 @@ const Profile = (props) => {
               ""
             ) : (
               <Flex mt={4} justify="space-between">
-                <Button bgColor="gray.300" width="48%" onClick={() => setProfileCancel()}>
+                <Button bgColor="gray.400" width="48%" onClick={() => setProfileCancel()}>
                   Cancel
                 </Button>
-                <Button bgColor="green.300" width="48%" onClick={() => setRead(true)}>
+                <Button bgColor="green.400" width="48%" onClick={() => setRead(true)}>
                   Save
                 </Button>
               </Flex>
@@ -137,10 +136,10 @@ const Profile = (props) => {
             ""
           ) : (
             <Flex mt={4} justify="space-between">
-              <Button bgColor="gray.300" width="48%" onClick={() => setProfileCancel()}>
+              <Button bgColor="gray.400" width="48%" onClick={() => setProfileCancel()}>
                 Cancel
               </Button>
-              <Button fontSize="12px" fontWeight="700" bgColor="red.300" width="48%" disabled onClick={() => setRead(true)}>
+              <Button fontSize="12px" fontWeight="700" bgColor="red.400" width="48%" disabled onClick={() => setRead(true)}>
                 Please enter a valid email!
               </Button>
             </Flex>
