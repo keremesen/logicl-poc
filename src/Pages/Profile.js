@@ -39,7 +39,7 @@ const Profile = (props) => {
 
   const setProfile = () => {
     setRead(false);
-    setisValid(false)
+    setisValid(false);
     setName("");
     setEmail("");
   };
@@ -77,7 +77,9 @@ const Profile = (props) => {
       direction="column"
       align="center"
     >
-      <Heading m={5} fontSize="64px">Profile</Heading>
+      <Heading m={5} fontSize="64px">
+        Profile
+      </Heading>
       <Flex direction="column" m={6} textAlign="center">
         <Flex direction="column" alignItems="center">
           <Avatar boxSize={64} bgColor="#000" src={user.photoUrl} />
@@ -96,7 +98,7 @@ const Profile = (props) => {
               setName(e.target.value);
             }}
           />
-          <FormLabel>EMAIL</FormLabel>
+          <FormLabel mt="8px">EMAIL</FormLabel>
           <FormControl id="email" isRequired>
             <Input
               value={email}
@@ -119,33 +121,70 @@ const Profile = (props) => {
           </Button>
           {/* {read ? ''  : <Button bgColor="green.300" mt={4} onClick={()=> setRead(true)}  >Save</Button>} */}
 
-          {isValid ? (
+          {isValid && email !== "" && name.length >= 3 ? (
             read ? (
               ""
             ) : (
               <Flex mt={4} justify="space-between">
-                <Button bgColor="gray.400" width="48%" onClick={() => setProfileCancel()}>
+                <Button
+                  bgColor="gray.400"
+                  width="48%"
+                  onClick={() => setProfileCancel()}
+                >
                   Cancel
                 </Button>
-                <Button bgColor="green.400" width="48%" onClick={() => setRead(true)}>
+                <Button
+                  bgColor="green.400"
+                  width="48%"
+                  onClick={() => setRead(true)}
+                >
                   Save
                 </Button>
               </Flex>
             )
           ) : read ? (
             ""
-          ) : (
+          ) : name.length < 3 ? (
             <Flex mt={4} justify="space-between">
-              <Button bgColor="gray.400" width="48%" onClick={() => setProfileCancel()}>
+              <Button
+                bgColor="gray.400"
+                width="48%"
+                onClick={() => setProfileCancel()}
+              >
                 Cancel
               </Button>
-              <Button fontSize="12px" fontWeight="700" bgColor="red.400" width="48%" disabled onClick={() => setRead(true)}>
+              <Button
+                fontSize="12px"
+                fontWeight="700"
+                bgColor="red.400"
+                width="48%"
+                disabled
+                onClick={() => setRead(true)}
+              >
+                Please enter a name!
+              </Button>
+            </Flex>
+          ) : (
+            <Flex mt={4} justify="space-between">
+              <Button
+                bgColor="gray.400"
+                width="48%"
+                onClick={() => setProfileCancel()}
+              >
+                Cancel
+              </Button>
+              <Button
+                fontSize="12px"
+                fontWeight="700"
+                bgColor="red.400"
+                width="48%"
+                disabled
+                onClick={() => setRead(true)}
+              >
                 Please enter a valid email!
               </Button>
             </Flex>
           )}
-
-
         </Flex>
       </Flex>
     </Flex>
